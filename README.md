@@ -3,8 +3,24 @@
 `这里重要存储Golang梦工厂公众号里面的文章和代码样例，有需要的可以进行下载。`
 `欢迎关注Golang梦工厂公众号，我会定期发布学习文章，深入每一个知识点，相信我，你会有所收获的。`
 
+## 公众号
+
+**关注公众号**，第一时间观看优质文章，第一时间获取资料。
+
+![公众号图片](https://song-oss.oss-cn-beijing.aliyuncs.com/wx/qrcode_for_gh_efed4775ba73_258.jpg)
 
 
-## 2020/5/23 
+## 目录介绍
 
-新增replite_go replite_py两个项目。
+
+``` lua
+Golang梦工厂
+├── ChatRoom -- 多人聊天室项目
+├── MyEpoch -- 论文神器安装包
+├── code_demo -- 代码样例
+	└──module_demo -- go modules 代码样例
+├── reptile_go -- Go语言实现爬取小说代码样例
+├── reptile_py -- python语言实现爬取小说代码样例
+```
+
+每一目录都在公众号文章有对应，并且具有详细Readme介绍，可以进行学习。
