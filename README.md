@@ -19,6 +19,7 @@ Golang梦工厂
 ├── MyEpoch -- 论文神器安装包
 ├── code_demo -- 代码样例
 	└──module_demo -- go modules 代码样例
+	└──grpc_demo -- gRPC 实践代码样例
 ├── reptile_go -- Go语言实现爬取小说代码样例
 ├── reptile_py -- python语言实现爬取小说代码样例
 └── Gin -- Gin框架
