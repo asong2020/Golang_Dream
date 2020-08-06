@@ -1,0 +1,25 @@
+system:
+  port: 8888
+
+mysql:
+  host: 127.0.0.1:3306
+  username: root
+  password: root1997
+  db: asong
+  conn:
+    maxidle: 50
+    maxopen: 50
+
+redis:
+  addr: 127.0.0.1:6379
+  db: 1
+  password: ''
+  poolsize: 100
+  cache:
+    tokenexpired: 7200 # expired time 2*60*60
+
+log:
+  prefix: 'Golang_梦工厂'
+  log-file: true
+  stdout: 'DEBUG'
+  file: 'DEBUG'
