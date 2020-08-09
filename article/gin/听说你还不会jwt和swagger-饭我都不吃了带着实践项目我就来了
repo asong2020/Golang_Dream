@@ -1,6 +1,6 @@
 ## 前言
 
-哈喽，大家好，我是asong，这是我的第八篇原创文章。听说你们还不会jwt、swagger，所以我带来一个入门级别的小项目。实现用户登陆、修改密码的操作。使用GIN（后台回复`Golang梦工厂`：gin，可获取2020GIN中文文档）作为web框架，使用jwt进行身份校验，使用swagger生成接口文档。代码已上传个人github：有需要的自行下载，配有详细使用文档。
+哈喽，大家好，我是asong，这是我的第八篇原创文章。听说你们还不会jwt、swagger，所以我带来一个入门级别的小项目。实现用户登陆、修改密码的操作。使用GIN（后台回复`Golang梦工厂`：gin，可获取2020GIN中文文档）作为web框架，使用jwt进行身份校验，使用swagger生成接口文档。代码已上传个人github：https://github.com/asong2020/Golang_Dream/tree/master/Gin/gin_jwt_swagger。有需要的自行下载，配有详细使用文档。
 
 
 
@@ -108,7 +108,7 @@ JWT工作可以用如下图表示：
 - Web框架：Gin
 - 第三方库：github.com/dgrijalva/jwt-go
 
-代码地址：
+代码地址：https://github.com/asong2020/Golang_Dream/tree/master/Gin/gin_jwt_swagger
 
 在这再推荐一个别人写好的JWT包，直接使用也可以：https://github.com/appleboy/gin-jwt
 
@@ -427,7 +427,7 @@ docs/
 
 这篇文章，到此就结束了，第一次写这么长的文章，对自己也是一种提升。有些模糊的概念，又学习了一遍，此篇文章，全是自己总结的，有错误欢迎指出。如果欢迎三连：点赞、看一看、转发；感谢各位。 
 
-不会的小伙伴，赶快学起来吧，项目代码地址：
+不会的小伙伴，赶快学起来吧，项目代码地址：https://github.com/asong2020/Golang_Dream/tree/master/Gin/gin_jwt_swagger
 
 我是asong，一名普普通通的程序员，永远保持一颗热爱技术的心。欢迎关注个人公众号【Golang梦工厂】，第一时间观看优质文章，你想学的这里都有。
 
