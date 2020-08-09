@@ -5,6 +5,7 @@ type Server struct {
 	Mysql Mysql `json:"mysql" yaml:"mysql"`
 	Redis Redis `json:"redis" yaml:"redis"`
 	Log Log `json:"log" yaml:"log"`
+	Jwt Jwt `json:"jwt" yaml:"jwt"`
 }
 
 type System struct {
@@ -37,4 +38,8 @@ type Log struct {
 	LogFile bool `json:"log_file" yaml:"log_file"`
 	Stdout string `json:"stdout" yaml:"stdout"`
 	File string `json:"file" yaml:"file"`
+}
+
+type Jwt struct {
+	Signkey string `json:"signkey" yaml:"signkey"`
 }

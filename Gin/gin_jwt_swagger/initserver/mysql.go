@@ -17,6 +17,10 @@ func InitMysql()  {
 	if err != nil{
 		global.AsongLogger.WithFields(logrus.Fields{"err":err}).Error("init mysql err")
 	}
+	err = global.AsongDb.Ping()
+	if err != nil{
+		global.AsongLogger.WithFields(logrus.Fields{"err":err}).Error("ping mysql")
+	}
 	global.AsongDb.SetMaxIdleConns(global.AsongServer.Mysql.Conn.MaxIdle)
 	global.AsongDb.SetMaxOpenConns(global.AsongServer.Mysql.Conn.Maxopen)
 	global.AsongDb.SetConnMaxLifetime(5 * time.Minute)

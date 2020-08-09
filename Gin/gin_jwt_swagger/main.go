@@ -44,6 +44,7 @@ func run()  {
 	server.MaxHeaderBytes = 1 << 20
 	global.AsongLogger.Info("欢迎关注公众号:Golang梦工厂")
 	global.AsongLogger.Info("gin_jwt_swagger 项目已启动")
+	global.AsongLogger.Info("swagger文档地址：http://localhost:8888/swagger/index.html")
 	err := server.ListenAndServe()
 	global.AsongLogger.WithFields(logrus.Fields{"err":err}).Info("gin start error")
 }
