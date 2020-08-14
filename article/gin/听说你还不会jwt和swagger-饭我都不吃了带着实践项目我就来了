@@ -324,7 +324,7 @@ func GenerateTokenForUser(c *gin.Context,u *model.User)  {
 
 
 
-## 2 swagger
+## 2. swagger
 
 随着互联网的发展，现在的网站都是前后端分离了，前端渲染页面，后端提供API。前后端的唯一联系，变成了API接口；API文档变成了前后端开发人员联系的纽带，变得越来越重要，swagger就是一款让你更好的书写API文档的框架。
 
