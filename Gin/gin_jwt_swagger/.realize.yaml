@@ -1,0 +1,17 @@
+settings:
+  legacy:
+    force: false
+    interval: 0s
+schema:
+- name: gin_jwt_swagger
+  path: .
+  commands: {}
+  watcher:
+    extensions:
+    - go
+    paths:
+    - /
+    ignored_paths:
+    - .git
+    - .realize
+    - vendor

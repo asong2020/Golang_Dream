@@ -8,7 +8,7 @@ import (
 	"asong.cloud/Golang_Dream/Gin/gin_jwt_swagger/global"
 )
 
-func LoggerInit()  {
+func LoggerInit() {
 	global.AsongLogger = logrus.New()
 
 	global.AsongLogger.SetFormatter(&logrus.TextFormatter{})

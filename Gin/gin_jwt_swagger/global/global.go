@@ -12,6 +12,6 @@ import (
 var (
 	AsongServer *config.Server
 	AsongLogger *logrus.Logger
-	AsongDb *sql.DB
-	AsongRedis *redis.Client
+	AsongDb     *sql.DB
+	AsongRedis  *redis.Client
 )

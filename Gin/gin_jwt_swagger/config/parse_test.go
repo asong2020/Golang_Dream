@@ -14,7 +14,7 @@ func TestCofParse(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		{"asong",args{file: "/Users/songsun/go/src/asong.cloud/Golang_Dream/Gin/gin_jwt_swagger/config.yaml",in: &Server{}},false},// TODO: Add test cases.
+		{"asong", args{file: "/Users/songsun/go/src/asong.cloud/Golang_Dream/Gin/gin_jwt_swagger/config.yaml", in: &Server{}}, false}, // TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

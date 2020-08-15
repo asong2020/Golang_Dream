@@ -13,12 +13,12 @@ type Response struct {
 }
 
 const (
-	ERROR = 9
+	ERROR   = 9
 	SUCCESS = 0
 )
 
-func Result(code int,data interface{},msg string,c *gin.Context)  {
-	c.JSON(http.StatusOK,Response{
+func Result(code int, data interface{}, msg string, c *gin.Context) {
+	c.JSON(http.StatusOK, Response{
 		code,
 		data,
 		msg,

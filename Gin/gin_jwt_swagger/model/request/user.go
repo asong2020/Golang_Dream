@@ -6,7 +6,7 @@ import (
 
 type RegisterRequest struct {
 	Username string `json:"username"`
-	Password string	`json:"password"`
+	Password string `json:"password"`
 	Nickname string `json:"nickname"`
 }
 
@@ -16,8 +16,8 @@ type LoginRequest struct {
 }
 
 type ChangePassword struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Username    string `json:"username"`
+	Password    string `json:"password"`
 	NewPassword string `json:"newPassword"`
 }
 

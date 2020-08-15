@@ -12,26 +12,26 @@ import (
 	"asong.cloud/Golang_Dream/Gin/gin_jwt_swagger/util/response"
 )
 
-func Auth()  gin.HandlerFunc{
+func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Request.Header.Get("token")
-		if token == ""{
-			response.Result(response.ERROR,gin.H{
+		if token == "" {
+			response.Result(response.ERROR, gin.H{
 				"reload": true,
-			},"非法访问",c)
+			}, "非法访问", c)
 			c.Abort()
 			return
 		}
 		j := NewJWT()
 		claims, err := j.ParseToken(token)
-		if err != nil{
+		if err != nil {
 			response.Result(response.ERROR, gin.H{
 				"reload": true,
 			}, err.Error(), c)
 			c.Abort()
 			return
 		}
-		c.Set("claims",claims)
+		c.Set("claims", claims)
 		c.Next()
 	}
 }
@@ -46,16 +46,16 @@ func NewJWT() *JWT {
 	}
 }
 
-func (j *JWT)GenerateToken(claims request.UserClaims)  (string,error){
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256,claims)
+func (j *JWT) GenerateToken(claims request.UserClaims) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(j.SigningKey)
 }
 
-func (j *JWT)ParseToken(t string) (*request.UserClaims,error) {
-	token, err := jwt.ParseWithClaims(t,&request.UserClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return j.SigningKey,nil
+func (j *JWT) ParseToken(t string) (*request.UserClaims, error) {
+	token, err := jwt.ParseWithClaims(t, &request.UserClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return j.SigningKey, nil
 	})
-	if err != nil{
+	if err != nil {
 		if v, ok := err.(*jwt.ValidationError); ok {
 			if v.Errors&jwt.ValidationErrorMalformed != 0 {
 				return nil, errors.New("That's not even a token")
