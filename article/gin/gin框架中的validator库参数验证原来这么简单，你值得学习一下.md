@@ -452,7 +452,7 @@ curl --location --request POST 'http://localhost:8888/user/login' \
 好啦，这一篇文章到这里结束啦。这一篇干货还是满满的。学会这些知识点，提高我们的开发效率，省去了一些没必要写的代码。能用的轮子我们还是不要错过滴。
 
 **我是asong，一名普普通通的程序猿，让我一起慢慢变强吧。欢迎各位的关注，我们下期见~~~**
-
+![公众号图片](https://song-oss.oss-cn-beijing.aliyuncs.com/wx/qrcode_for_gh_efed4775ba73_258.jpg)
 推荐往期文章：
 
 - [听说你还不会jwt和swagger-饭我都不吃了带着实践项目我就来了](https://mp.weixin.qq.com/s/z-PGZE84STccvfkf8ehTgA)
