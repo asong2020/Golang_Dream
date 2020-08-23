@@ -2,7 +2,7 @@
 
 哈喽，大家好，我是asong。这是我的第十一篇原创文章。这周工作的时候接到了一个需求，需要对一个日志文件进行分析，分析请求次数以及耗费的时间平均时间等信息，整理成excel表格，方便分析做优化。刚拿到这个需求的时候，着实有点懵逼。那么多日志，我该怎么分析呢？该使用什么工具去分析呢。最后还要生成excel表格。哇，给我愁坏了。所以我开始并没有直接去做需求，而是去查资料、问同事、朋友，怎么做日志分析。确实搜到了一些日志分析的方法：awk、python。无疑是用脚本来做。但是我对这些不太熟悉呀，而且只有一下午的时间去做。最后我选择了使用golang来做。相比于其他，我对golang更熟悉。确定了语言，我就开始分析日志了，下面我就来详细介绍一下我是怎么使用go完成的日志分析，并成功生成excel表格。
 
-代码已上传GitHub，可自行下载学习。[传送门]()
+代码已上传GitHub，可自行下载学习。[传送门](https://github.com/asong2020/Golang_Dream/tree/master/code_demo/log_analysis)
 
 ## 前期准备
 
@@ -191,7 +191,7 @@ func analysisBody()  {
 
 
 
-### 倒出excel文件
+### 导出excel文件
 
 这里使用的是`excelize`库。首先进行安装：
 
@@ -201,7 +201,7 @@ go get github.com/360EntSecGroup-Skylar/excelize
 
 excelize 详细的文档请点击：https://xuri.me/excelize/zh-hans/。这里就不讲解具体的使用方法了，直接上代码了。可以推荐一个博客，我也是在这上面学习的。[传送门](https://www.xiexiaodong7.com/?p=17)。这个库还可以合并单元格，更多玩法，欢迎解锁。
 
-倒出代码示例如下：
+导出代码示例如下：
 
 ```go
 type cellValue struct {
@@ -282,5 +282,20 @@ func exportExcel()  {
 
 ## 总结
 
-我也是第一次使用go进行日志分析。总体来说还是挺方便的。最主要是倒出excel真的很方便。你学会了吗？没学会不要紧，我的示例代码已上传github，可自行下载学习，如果能给一个小星星就更好了呢。[传送门地址]()
+我也是第一次使用go进行日志分析。总体来说还是挺方便的。最主要是导出excel真的很方便。你学会了吗？没学会不要紧，我的示例代码已上传github，可自行下载学习，如果能给一个小星星就更好了呢。[传送门地址](https://github.com/asong2020/Golang_Dream/tree/master/code_demo/log_analysis)。
+
+**我是asong，一名普普通通的程序猿，让我一起慢慢变强吧。欢迎各位的关注，我们下期见~~~**
+
+![](https://song-oss.oss-cn-beijing.aliyuncs.com/wx/qrcode_for_gh_efed4775ba73_258.jpg)
+
+推荐往期文章：
+
+- [听说你还不会jwt和swagger-饭我都不吃了带着实践项目我就来了](https://mp.weixin.qq.com/s/z-PGZE84STccvfkf8ehTgA)
+- [掌握这些Go语言特性，你的水平将提高N个档次(二)](https://mp.weixin.qq.com/s/7yyo83SzgQbEB7QWGY7k-w)
+- [go实现多人聊天室，在这里你想聊什么都可以的啦！！！](https://mp.weixin.qq.com/s/H7F85CncQNdnPsjvGiemtg)
+- [grpc实践-学会grpc就是这么简单](https://mp.weixin.qq.com/s/mOkihZEO7uwEAnnRKGdkLA)
+- [go标准库rpc实践](https://mp.weixin.qq.com/s/d0xKVe_Cq1WsUGZxIlU8mw)
+- [2020最新Gin框架中文文档 asong又捡起来了英语，用心翻译](https://mp.weixin.qq.com/s/vx8A6EEO2mgEMteUZNzkDg)
+- [基于gin的几种热加载方式](https://mp.weixin.qq.com/s/CZvjXp3dimU-2hZlvsLfsw)
+- [boss: 这小子还不会使用validator库进行数据校验，开了～～～](https://mp.weixin.qq.com/s?__biz=MzIzMDU0MTA3Nw==&mid=2247483829&idx=1&sn=d7cf4f46ea038a68e74a4bf00bbf64a9&scene=19&token=1606435091&lang=zh_CN#wechat_redirect)
 
