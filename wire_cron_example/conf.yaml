@@ -1,0 +1,8 @@
+mysql:
+  host: 127.0.0.1:3306
+  username: root
+  password: root1997
+  db: asong
+  conn:
+    maxidle: 50
+    maxopen: 50
