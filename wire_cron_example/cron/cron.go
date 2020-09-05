@@ -14,7 +14,7 @@ type Cron struct {
 func NewCron(scanner *task.Scanner) *Cron {
 	return &Cron{
 		Scanner: scanner,
-		Schedule: cron.New(),
+		Schedule: cron.New(cron.WithSeconds()),
 	}
 }
 
