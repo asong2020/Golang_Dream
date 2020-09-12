@@ -1,8 +1,8 @@
 ## 前言
 
-> 哈喽，everybody，这是`go-elastic`学习系列教程第二篇文章。[上一篇](https://mp.weixin.qq.com/s/mV2hnfctQuRLRKpPPT9XRw)我们学习了`ElasticSearch`基础，如果还不懂基础的，可以先看一看上一篇文章，[传送门](https://mp.weixin.qq.com/s/mV2hnfctQuRLRKpPPT9XRw)。这一篇我们开始实战，写了一个小`demo`，带你们轻松入门`ElasticSearch`实战开发，再也不用担心`es`部分的需求开发了。代码已上传[github](),可自行下载学习。如果能给一个小星星就好啦。好啦，废话不多说，直接开始吧。
+> 哈喽，everybody，这是`go-elastic`学习系列教程第二篇文章。[上一篇](https://mp.weixin.qq.com/s/mV2hnfctQuRLRKpPPT9XRw)我们学习了`ElasticSearch`基础，如果还不懂基础的，可以先看一看上一篇文章，[传送门](https://mp.weixin.qq.com/s/mV2hnfctQuRLRKpPPT9XRw)。这一篇我们开始实战，写了一个小`demo`，带你们轻松入门`ElasticSearch`实战开发，再也不用担心`es`部分的需求开发了。代码已上传[github](https://github.com/asong2020/Golang_Dream/tree/master/code_demo/go-elastic-asong),可自行下载学习。如果能给一个小星星就好啦。好啦，废话不多说，直接开始吧。
 >
-> github地址：
+> github地址：https://github.com/asong2020/Golang_Dream/tree/master/code_demo/go-elastic-asong
 
 
 
@@ -547,4 +547,30 @@ $ curl --location --request GET 'http://localhost:8080/api/user/info?id=1,2,3'
 
 这一篇到这里就结束了。本文通过一个代码样例，学习使用go进行`eslatic`开发，本文没有将所有方法都讲全，只是将我们日常使用的一些方法整理出来，供大家入门使用，也可以修改一下使用到项目中呦，以为我在项目中也是这么使用的。如果上面的代码段没有看懂，可以到我的github上下载源代码进行学习，运行整个项目，通过`api`进行测试。如果觉得有用，给个小星星呗！！！
 
-github地址：
+github地址：https://github.com/asong2020/Golang_Dream/tree/master/code_demo/go-elastic-asong
+
+**结尾给大家发一个小福利吧，最近我在看[微服务架构设计模式]这一本书，讲的很好，自己也收集了一本PDF，有需要的小伙可以到自行下载。获取方式：关注公众号：[Golang梦工厂]，后台回复：[微服务]，即可获取。**
+
+**我翻译了一份GIN中文文档，会定期进行维护，有需要的小伙伴后台回复[gin]即可下载。**
+
+**我是asong，一名普普通通的程序猿，让我一起慢慢变强吧。我自己建了一个`golang`交流群，有需要的小伙伴加我`vx`,我拉你入群。欢迎各位的关注，我们下期见~~~**
+
+![](https://song-oss.oss-cn-beijing.aliyuncs.com/wx/qrcode_for_gh_efed4775ba73_258.jpg)
+
+推荐往期文章：
+
+- [go-ElasticSearch入门看这一篇就够了(一)](https://mp.weixin.qq.com/s/mV2hnfctQuRLRKpPPT9XRw)
+
+- [面试官：go中for-range使用过吗？这几个问题你能解释一下原因吗](https://mp.weixin.qq.com/s/G7z80u83LTgLyfHgzgrd9g)
+
+- [学会wire依赖注入、cron定时任务其实就这么简单！](https://mp.weixin.qq.com/s/qmbCmwZGmqKIZDlNs_a3Vw)
+
+- [听说你还不会jwt和swagger-饭我都不吃了带着实践项目我就来了](https://mp.weixin.qq.com/s/z-PGZE84STccvfkf8ehTgA)
+- [掌握这些Go语言特性，你的水平将提高N个档次(二)](https://mp.weixin.qq.com/s/7yyo83SzgQbEB7QWGY7k-w)
+- [go实现多人聊天室，在这里你想聊什么都可以的啦！！！](https://mp.weixin.qq.com/s/H7F85CncQNdnPsjvGiemtg)
+- [grpc实践-学会grpc就是这么简单](https://mp.weixin.qq.com/s/mOkihZEO7uwEAnnRKGdkLA)
+- [go标准库rpc实践](https://mp.weixin.qq.com/s/d0xKVe_Cq1WsUGZxIlU8mw)
+- [2020最新Gin框架中文文档 asong又捡起来了英语，用心翻译](https://mp.weixin.qq.com/s/vx8A6EEO2mgEMteUZNzkDg)
+- [基于gin的几种热加载方式](https://mp.weixin.qq.com/s/CZvjXp3dimU-2hZlvsLfsw)
+- [boss: 这小子还不会使用validator库进行数据校验，开了～～～](https://mp.weixin.qq.com/s?__biz=MzIzMDU0MTA3Nw==&mid=2247483829&idx=1&sn=d7cf4f46ea038a68e74a4bf00bbf64a9&scene=19&token=1606435091&lang=zh_CN#wechat_redirect)
+

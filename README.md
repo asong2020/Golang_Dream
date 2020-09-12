@@ -9,6 +9,10 @@
 
 ![公众号图片](https://song-oss.oss-cn-beijing.aliyuncs.com/wx/qrcode_for_gh_efed4775ba73_258.jpg)
 
+**QQ交流群**
+
+<img src="https://song-oss.oss-cn-beijing.aliyuncs.com/wx/WechatIMG1094.jpeg" style="zoom:50%;" />
+
 
 ## 目录介绍
 
@@ -34,3 +38,20 @@ Golang梦工厂
 ```
 
 每一目录都在公众号文章有对应，并且具有详细Readme介绍，可以进行学习。
+
+
+
+## 资料获取详情
+
+
+
+#### 微服务书籍获取
+
+扫描上方二维码，关注公众号，后台回复：微服务。
+
+
+
+#### GIN官方中文文档获取
+
+扫描上方二维码，关注公众号，后台回复：gin。
+
