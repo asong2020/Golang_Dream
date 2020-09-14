@@ -9,6 +9,32 @@
 
 
 
+### 基础操作
+
+#### 查看提交历史
+
+```shell
+# 不带任何参数，git log以相反的时间顺序列出在该存储库中所做的提交，
+$ git log 
+
+# -p 或者 --patch，它显示了每次提交中引入的差异(补丁输出). -2 限制显示的日志条目的数量。例如-2用于仅显示最后两个条目。
+$ git log -p -2
+
+# 上面查看的是比较详细的信息 如果想查看每次提交的一些简短统计信息，可以使用如下命令
+$ git log --stat
+
+# 还有一个真正有用的选项是 --pretty.此选项将日志输出更改为默认格式以外的其他格式。一些预建的选项值可供您使用。oneline此选项的值将每条提交打印在一行上，如果您要查看大量的提交，这将很有用。 short，full，和fuller值显示在大致相同的格式，但分别与更少或更多的信息，输出：
+$ git log --pretty=oneline
+
+# 最有趣的选项值是format，它允许您指定自己的日志输出格式。当生成用于机器解析的输出时，这特别有用-因为您明确指定了格式，所以您知道它不会随着Git更新而改变：
+$ git log --pretty=format:"%h - %an, %ar : %s"
+```
+
+
+
+
+
+
 ### 分支操作指令
 
 #### 查看分支
@@ -18,6 +44,30 @@
 ```shell
 $ git branch
 ```
+
+#### 创建分支
+```shell
+$ git branch <branch name> 
+$ git checkout -b <branch name> # 这个我平常用的比较多,创建分支并切换到该分支
+```
+
+#### 切换分支
+
+```shell
+$ git checkout <branch name> # 切换分支
+$ git checkout -b <branch name> # 这个我平常用的比较多,创建分支并切换到该分支
+```
+
+
+
+#### 本地分支关联远程分支
+
+```shell
+$ git push origin <branch name>:<branch name> # 将本地xn分支推送至远程xn分支
+
+$ git push --set-upstream origin <branch name> # 切换到你要推送到远程分支的本地分支 进行关联
+```
+
 
 #### 远程分支
 
@@ -29,6 +79,7 @@ $ git branch
 $ git branch -a # 查看本地分支和远程分支
 $ git branch -v
 $ git branch -r # 查看远程仓库的分支
+$ git branch -vv # 查看本地分支关联(跟踪)的远程分支之间的对应关系，本地分支对应那个远程分支
 ```
 
 - 查看远程分支列表
@@ -40,6 +91,7 @@ $ git ls-remote
 ##### 删除远程分支
 
 ```shell
+$ git push origin :<branch name> //将一个空分支推送到远程即为删除
 $ git push origin --delete <branchName>
 ```
 
