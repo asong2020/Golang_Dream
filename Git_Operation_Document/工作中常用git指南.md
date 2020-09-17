@@ -32,6 +32,28 @@ $ git log --pretty=format:"%h - %an, %ar : %s"
 
 
 
+### 关联github仓库
+
+这里省略github上创建仓库的步骤，新创建一个仓库后，在本地关联步骤：
+
+```shell
+$ echo "# go-algorithm" >> README.md
+$ git init
+$ git add README.md
+$ git commit -m "first commit"
+$ git branch -M master
+$ git remote add origin git@github.com:<github名字>/<仓库名字>.git
+$ git push -u origin master
+```
+
+若是一个已存在的仓库，在本地关联步骤:
+
+```shell
+$ git branch -M master
+$ git remote add origin git@github.com:<github名字>/<仓库名字>.git
+$ git push -u origin master
+```
+
 
 
 
