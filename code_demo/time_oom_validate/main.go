@@ -25,11 +25,12 @@ func main()  {
 			fmt.Printf("start pprof failed on %s\n", ip)
 		}
 	}()
-
+	idleTimeout := time.NewTicker(3 * time.Minute)
+	defer idleTimeout.Stop()
 	for  {
 		select {
 		case <-ch:
-		case <- time.After(time.Minute * 3):
+		case <- idleTimeout.C:
 		}
 	}
 }
