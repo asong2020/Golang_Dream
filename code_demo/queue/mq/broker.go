@@ -79,11 +79,17 @@ func (b *BrokerImpl) broadcast(msg interface{}, subscribers []chan interface{}) 
 	default:
 		concurrency = 1
 	}
+
+	//采用Timer 而不是使用time.After 原因：time.After会产生内存泄漏 在计时器触发之前，垃圾回收器不会回收Timer
+	idleDuration := 5 * time.Millisecond
+	idleTimeout := time.NewTimer(idleDuration)
+	defer idleTimeout.Stop()
 	pub := func(start int) {
 		for j := start; j < count; j += concurrency {
+			idleTimeout.Reset(idleDuration)
 			select {
 			case subscribers[j] <- msg:
-			case <-time.After(time.Millisecond * 5):
+			case <-idleTimeout.C:
 			case <-b.exit:
 				return
 			}
@@ -124,6 +130,7 @@ func (b *BrokerImpl) unsubscribe(topic string, sub <-chan interface{}) error {
 		return nil
 	}
 	// delete subscriber
+	b.Lock()
 	var newSubs []chan interface{}
 	for _, subscriber := range subscribers {
 		if subscriber == sub {
@@ -132,7 +139,6 @@ func (b *BrokerImpl) unsubscribe(topic string, sub <-chan interface{}) error {
 		newSubs = append(newSubs, subscriber)
 	}
 
-	b.Lock()
 	b.topics[topic] = newSubs
 	b.Unlock()
 	return nil

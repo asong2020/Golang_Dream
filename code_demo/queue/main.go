@@ -12,7 +12,7 @@ var (
 )
 
 func main()  {
-	//OnceTopic()
+	OnceTopic()
 	//ManyTopic()
 }
 
