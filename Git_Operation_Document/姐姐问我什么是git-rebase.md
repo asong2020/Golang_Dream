@@ -29,5 +29,40 @@
 $ git rebase -i HEAD~5
 ```
 
+执行该指令后会自动弹出`vim`编辑模式：
 
+```vim
+pick 1195166 add oom demo
+pick f4cd3ef update
+pick 5803d8f update
+pick 2f0b250 update
+pick 6e4ad74 add git rebase
 
+# Rebase 2bc0857..6e4ad74 onto 2f0b250 (5 commands)
+#
+# Commands:
+# p, pick <commit> = use commit
+# r, reword <commit> = use commit, but edit the commit message
+# e, edit <commit> = use commit, but stop for amending
+# s, squash <commit> = use commit, but meld into previous commit
+# f, fixup <commit> = like "squash", but discard this commit's log message
+# x, exec <command> = run command (the rest of the line) using shell
+# b, break = stop here (continue rebase later with 'git rebase --continue')
+# d, drop <commit> = remove commit
+# l, label <label> = label current HEAD with a name
+# t, reset <label> = reset HEAD to a label
+# m, merge [-C <commit> | -c <commit>] <label> [# <oneline>]
+# .       create a merge commit using the original merge commit's
+# .       message (or the oneline, if no original merge commit was
+# .       specified). Use -c <commit> to reword the commit message.
+#
+# These lines can be re-ordered; they are executed from top to bottom.
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+#
+# However, if you remove everything, the rebase will be aborted.
+#
+# Note that empty commits are commented out
+```
+
+从这里我们可以看出前面5行是我们要合并的记录，
