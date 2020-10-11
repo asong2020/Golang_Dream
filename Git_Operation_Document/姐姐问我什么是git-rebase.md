@@ -26,16 +26,30 @@
 通过上面的场景，我们可以引申出`git-rebase`的第一个作用：合并提交记录。现在我们想合并最近5次的提交记录，执行：
 
 ```shell
+<<<<<<< HEAD
 $ git rebase -i HEAD~2
+=======
+$ git rebase -i HEAD~5
+>>>>>>> 72722e6f3fb21da00a8fdb1d8e0ab477ad77dce2
 ```
 
 执行该指令后会自动弹出`vim`编辑模式：
 
 ```vim
+<<<<<<< HEAD
 pick e2c71c6 update readme
 pick 3d2c660 wip: merge`
 
 # Rebase 5f47a82..3d2c660 onto 5f47a82 (2 commands)
+=======
+pick 1195166 add oom demo
+pick f4cd3ef update
+pick 5803d8f update
+pick 2f0b250 update
+pick 6e4ad74 add git rebase
+
+# Rebase 2bc0857..6e4ad74 onto 2f0b250 (5 commands)
+>>>>>>> 72722e6f3fb21da00a8fdb1d8e0ab477ad77dce2
 #
 # Commands:
 # p, pick <commit> = use commit
@@ -62,6 +76,7 @@ pick 3d2c660 wip: merge`
 # Note that empty commits are commented out
 ```
 
+<<<<<<< HEAD
 从这里我们可以看出前面5行是我们要合并的记录，不过前面都带了一个相同的指令：`pick`，这是什么指令呢，不要慌，这不，下面已经给出了`commands`:
 
 ```shell
@@ -284,3 +299,6 @@ git rebase --abort
 - [2020最新Gin框架中文文档 asong又捡起来了英语，用心翻译](https://mp.weixin.qq.com/s/vx8A6EEO2mgEMteUZNzkDg)
 - [基于gin的几种热加载方式](https://mp.weixin.qq.com/s/CZvjXp3dimU-2hZlvsLfsw)
 - [boss: 这小子还不会使用validator库进行数据校验，开了～～～](https://mp.weixin.qq.com/s?__biz=MzIzMDU0MTA3Nw==&mid=2247483829&idx=1&sn=d7cf4f46ea038a68e74a4bf00bbf64a9&scene=19&token=1606435091&lang=zh_CN#wechat_redirect)
+=======
+从这里我们可以看出前面5行是我们要合并的记录，
+>>>>>>> 72722e6f3fb21da00a8fdb1d8e0ab477ad77dce2
