@@ -4,7 +4,7 @@
 >
 >自己翻译一个粗略版的`machinery`中文文档，有需要的伙伴们公众号自取无水印版：后台回复：machinery即可领取。
 >
->或者github下载：
+>或者github下载：https://github.com/asong2020/Golang_Dream/tree/master/machinery
 
 
 
@@ -243,7 +243,7 @@ func Sum(args []int64) (int64, error) {
 
 
 
-#### 3.2 chods
+#### 3.2 chrods
 
 我们在做项目时，往往会有一些回调场景，`machiney`也为我们考虑到了这一点，`Chord`允许你定一个回调任务在`groups`中的所有任务执行结束后被执行。
 
@@ -322,7 +322,7 @@ callback := &tasks.Signature{
 
 
 
-
+文中代码地址：https://github.com/asong2020/Golang_Dream/tree/master/machinery/example
 
 ## 总结
 

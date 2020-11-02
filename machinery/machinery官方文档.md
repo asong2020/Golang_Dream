@@ -904,7 +904,7 @@ for _, result := range results {
 
 
 
-## Chains
+### Chains
 
 `chain`就是一个接一个执行的任务集，每个成功的任务都会触发`chain`中的下一个任务。例如:
 
