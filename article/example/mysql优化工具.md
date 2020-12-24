@@ -172,9 +172,137 @@ FROM
 * **Content:**  当表结构变更时，使用 \* 通配符选择所有列将导致查询的含义和行为会发生更改，可能导致查询返回更多的数据。
 ```
 
-现在是完全根据SQL语句进行分析的，因为没有连接到`mysql`。可以看到，给出的报告也很详细，但是只是空壳子，仅凭`SQL`语句给出的分析并不是准确的，所以我开始接下来的应用。
+现在是完全根据SQL语句进行分析的，因为没有连接到`mysql`。可以看到，给出的报告也很详细，但是只是空壳子，仅凭`SQL`语句给出的分析并不是准确的，所以我们开始接下来的应用。
 
 
 
 ### 2. 连接`mysql`生成`EXPLAIN`分析报告
+
+我们可以在配置文件中配置好`mysql`相关的配置，操作如下：
+
+```go
+vi soar.yaml
+# yaml format config file
+online-dsn:
+    addr:     127.0.0.1:3306
+    schema:   asong
+    user:     root
+    password: root1997
+    disable:  false
+
+test-dsn:
+    addr:     127.0.0.1:3306
+    schema:   asong
+    user:     root
+    password: root1997
+    disable:  false
+```
+
+配置好了，我们来实践一下子吧：
+
+```shell
+$ echo "SELECT id,username,nickname,password,salt,avatar,uptime FROM users WHERE username = 'asong1111'" | soar.darwin-amd64 -test-dsn="root:root1997@127.0.0.1:3306/asong" -allow-online-as-test -log-output=soar.log
+$ # Query: D12A420193AD1674
+
+★ ★ ★ ★ ★ 100分
+
+​```sql
+
+SELECT
+  id, username, nickname, PASSWORD, salt, avatar, uptime
+FROM
+  users
+WHERE
+  username  = 'asong1111'
+​```
+
+##  Explain信息
+
+| id | select\_type | table | partitions | type | possible_keys | key | key\_len | ref | rows | filtered | scalability | Extra |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1  | SIMPLE | *users* | NULL | const | username | username | 258 | const | 1 | ☠️ **100.00%** | ☠️ **O(n)** | NULL |
+
+
+
+### Explain信息解读
+
+#### SelectType信息解读
+
+* **SIMPLE**: 简单SELECT(不使用UNION或子查询等).
+
+#### Type信息解读
+
+* **const**: const用于使用常数值比较PRIMARY KEY时, 当查询的表仅有一行时, 使用system. 例:SELECT * FROM tbl WHERE col = 1.
+```
+
+这回结果中多了EXPLAIN信息分析报告。这对于刚开始入门的小伙伴们是友好的，因为我们对`Explain`解析的字段并不熟悉，有了它我们可以完美的分析`SQL`中的问题，是不是很棒。
+
+
+
+### 3. 语法检查
+
+`soar`工具不仅仅可以进行`sql`语句分析，还可以进行对`sql`语法进行检查，找出其中的问题，来看个例子：
+
+```shell
+$ echo "selec * from users" | soar.darwin-amd64 -only-syntax-check
+At SQL 1 : line 1 column 5 near "selec * from users" (total length 18)
+```
+
+这里`select`关键字少了一个`t`，运行该指令帮助我们一下就定位了问题，当我们的`sql`语句很长时，就可以使用该指令来辅助我们检查`SQL`语句是否正确。
+
+
+
+### 4. SQL美化
+
+我们日常开发时，经常会看其他人写的代码，因为水平不一样，所以有些`SQL`语句会写的很乱，所以这个工具就派上用场了，我们可以把我们的`SQL`语句变得漂亮一些，更容易我们理解哦。
+
+```shell
+$ echo "SELECT id,username,nickname,password,salt,avatar,uptime FROM users WHERE username = 'asong1111'" | soar.darwin-amd64 -report-type=pretty
+
+SELECT
+  id, username, nickname, PASSWORD, salt, avatar, uptime
+FROM
+  users
+WHERE
+  username  = 'asong1111';
+```
+
+这样看起来是不是更直观了呢～～。
+
+
+
+## 结尾
+
+因为我也才是刚使用这个工具，更多的玩法我还没有发现，以后补充。更多玩法可以自己研究一下，github传送门：https://github.com/XiaoMi/soar。官方文档其实很粗糙，更多方法解锁还要靠自己研究，毕竟源码已经给我们了，对于学习`go`也有一定帮助，当作一个小项目慢慢优化岂不是更好呢～～。
+
+**好啦，这一篇文章到这就结束了，我们下期见～～。希望对你们有用，又不对的地方欢迎指出，可添加我的golang交流群，我们一起学习交流。**
+
+**结尾给大家发一个小福利吧，最近我在看[微服务架构设计模式]这一本书，讲的很好，自己也收集了一本PDF，有需要的小伙可以到自行下载。获取方式：关注公众号：[Golang梦工厂]，后台回复：[微服务]，即可获取。**
+
+**我翻译了一份GIN中文文档，会定期进行维护，有需要的小伙伴后台回复[gin]即可下载。**
+
+**翻译了一份Machinery中文文档，会定期进行维护，有需要的小伙伴们后台回复[machinery]即可获取。**
+
+**我是asong，一名普普通通的程序猿，让gi我一起慢慢变强吧。我自己建了一个`golang`交流群，有需要的小伙伴加我`vx`,我拉你入群。欢迎各位的关注，我们下期见~~~**
+
+![](https://song-oss.oss-cn-beijing.aliyuncs.com/wx/qrcode_for_gh_efed4775ba73_258.jpg)
+
+推荐往期文章：
+
+- [machinery-go异步任务队列](https://mp.weixin.qq.com/s/4QG69Qh1q7_i0lJdxKXWyg)
+- [十张动图带你搞懂排序算法(附go实现代码)](https://mp.weixin.qq.com/s/rZBsoKuS-ORvV3kML39jKw)
+- [Go语言相关书籍推荐（从入门到放弃）](https://mp.weixin.qq.com/s/PaTPwRjG5dFMnOSbOlKcQA)
+- [go参数传递类型](https://mp.weixin.qq.com/s/JHbFh2GhoKewlemq7iI59Q)
+- [手把手教姐姐写消息队列](https://mp.weixin.qq.com/s/0MykGst1e2pgnXXUjojvhQ)
+- [常见面试题之缓存雪崩、缓存穿透、缓存击穿](https://mp.weixin.qq.com/s?__biz=MzIzMDU0MTA3Nw==&mid=2247483988&idx=1&sn=3bd52650907867d65f1c4d5c3cff8f13&chksm=e8b0902edfc71938f7d7a29246d7278ac48e6c104ba27c684e12e840892252b0823de94b94c1&token=1558933779&lang=zh_CN#rd)
+- [详解Context包，看这一篇就够了！！！](https://mp.weixin.qq.com/s/JKMHUpwXzLoSzWt_ElptFg)
+- [go-ElasticSearch入门看这一篇就够了(一)](https://mp.weixin.qq.com/s/mV2hnfctQuRLRKpPPT9XRw)
+- [面试官：go中for-range使用过吗？这几个问题你能解释一下原因吗](https://mp.weixin.qq.com/s/G7z80u83LTgLyfHgzgrd9g)
+- [学会wire依赖注入、cron定时任务其实就这么简单！](https://mp.weixin.qq.com/s/qmbCmwZGmqKIZDlNs_a3Vw)
+- [听说你还不会jwt和swagger-饭我都不吃了带着实践项目我就来了](https://mp.weixin.qq.com/s/z-PGZE84STccvfkf8ehTgA)
+- [掌握这些Go语言特性，你的水平将提高N个档次(二)](https://mp.weixin.qq.com/s/7yyo83SzgQbEB7QWGY7k-w)
+
+
+
+
 

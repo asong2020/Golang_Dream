@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="f3a15bb6-7dac-457d-9218-52c2ffd8abca" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../article/example/golang值传递详解.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../article/example/golang值传递详解.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../article/example/mysql优化工具.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../article/example/mysql优化工具.md" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" path="/usr/local/Cellar/go/1.14.4/libexec" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="projectConfigVersion" value="2" />
+  </component>
+  <component name="GoLibraries">
+    <option name="indexEntireGoPath" value="false" />
+  </component>
+  <component name="ProjectId" id="1lBTbPKzCCYRWWw1MHeODp0lSvl" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultGoTemplateProperty" value="Go File" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="configurable.Global.GOPATH.is.expanded" value="true" />
+    <property name="configurable.Module.GOPATH.is.expanded" value="false" />
+    <property name="configurable.Project.GOPATH.is.expanded" value="true" />
+    <property name="go.import.settings.migrated" value="true" />
+    <property name="go.sdk.automatically.set" value="true" />
+    <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="google.prototext.language" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/model" />
+      <recent name="$PROJECT_DIR$/service" />
+      <recent name="$PROJECT_DIR$/conf" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Go Build.go build asong.cloud/Golang_Dream/code_demo/leaf">
+    <configuration name="go build asong.cloud/Golang_Dream/code_demo/leaf" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="leaf" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <filePath value="$PROJECT_DIR$/main.go" />
+      <package value="asong.cloud/Golang_Dream/code_demo/leaf" />
+      <directory value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Test_Get in asong.cloud/Golang_Dream/code_demo/leaf/dao" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="leaf" />
+      <working_directory value="$PROJECT_DIR$/dao" />
+      <parameters value=" -testify.m ^Test_Get$" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="asong.cloud/Golang_Dream/code_demo/leaf/dao" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Test_GetAll in asong.cloud/Golang_Dream/code_demo/leaf/dao" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="leaf" />
+      <working_directory value="$PROJECT_DIR$/dao" />
+      <parameters value=" -testify.m ^Test_GetAll$" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="asong.cloud/Golang_Dream/code_demo/leaf/dao" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Test_UpdateMaxID in asong.cloud/Golang_Dream/code_demo/leaf/dao" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="leaf" />
+      <working_directory value="$PROJECT_DIR$/dao" />
+      <parameters value=" -testify.m ^Test_UpdateMaxID$" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="asong.cloud/Golang_Dream/code_demo/leaf/dao" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Test_UpdateMaxIDByCustomStep in asong.cloud/Golang_Dream/code_demo/leaf/dao" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="leaf" />
+      <working_directory value="$PROJECT_DIR$/dao" />
+      <parameters value=" -testify.m ^Test_UpdateMaxIDByCustomStep$" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="asong.cloud/Golang_Dream/code_demo/leaf/dao" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build asong.cloud/Golang_Dream/code_demo/leaf" />
+        <item itemvalue="Go Test.Test_GetAll in asong.cloud/Golang_Dream/code_demo/leaf/dao" />
+        <item itemvalue="Go Test.Test_UpdateMaxIDByCustomStep in asong.cloud/Golang_Dream/code_demo/leaf/dao" />
+        <item itemvalue="Go Test.Test_UpdateMaxID in asong.cloud/Golang_Dream/code_demo/leaf/dao" />
+        <item itemvalue="Go Test.Test_Get in asong.cloud/Golang_Dream/code_demo/leaf/dao" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="VgoProject">
+    <integration-enabled>true</integration-enabled>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="2528" y="255" width="448" height="576" key="#Build_Tags_&amp;_Vendoring" timestamp="1607231080551">
+      <screen x="1792" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2528" y="255" width="448" height="576" key="#Build_Tags_&amp;_Vendoring/1792.0.1920.1080/0.0.1792.1120@1792.0.1920.1080" timestamp="1607231080551" />
+    <state x="548" y="345" key="EditFileWatcherDialog" timestamp="1607070868985">
+      <screen x="0" y="0" width="1792" height="1120" />
+    </state>
+    <state x="548" y="345" key="EditFileWatcherDialog/1792.0.1920.1080/0.0.1792.1120@0.0.1792.1120" timestamp="1607070868985" />
+    <state width="1878" height="303" key="GridCell.Tab.0.bottom" timestamp="1607235726111">
+      <screen x="1792" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1750" height="318" key="GridCell.Tab.0.bottom/1792.0.1920.1080/0.0.1792.1120@0.0.1792.1120" timestamp="1607132381307" />
+    <state width="1878" height="303" key="GridCell.Tab.0.bottom/1792.0.1920.1080/0.0.1792.1120@1792.0.1920.1080" timestamp="1607235726111" />
+    <state width="1878" height="303" key="GridCell.Tab.0.bottom/1792.0.1920.1080/0.23.1792.1036@1792.0.1920.1080" timestamp="1607234279105" />
+    <state width="1878" height="303" key="GridCell.Tab.0.bottom/1792.0.1920.1080/0.23.1792.1037@1792.0.1920.1080" timestamp="1607235084920" />
+    <state width="1878" height="305" key="GridCell.Tab.0.bottom/1792.0.1920.1080/0.23.1792.1041@1792.0.1920.1080" timestamp="1607136808827" />
+    <state width="1878" height="305" key="GridCell.Tab.0.bottom/1792.0.1920.1080/0.23.1792.1097@1792.0.1920.1080" timestamp="1607137369215" />
+    <state width="1878" height="303" key="GridCell.Tab.0.center" timestamp="1607235726109">
+      <screen x="1792" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1750" height="318" key="GridCell.Tab.0.center/1792.0.1920.1080/0.0.1792.1120@0.0.1792.1120" timestamp="1607132381306" />
+    <state width="1878" height="303" key="GridCell.Tab.0.center/1792.0.1920.1080/0.0.1792.1120@1792.0.1920.1080" timestamp="1607235726109" />
+    <state width="1878" height="303" key="GridCell.Tab.0.center/1792.0.1920.1080/0.23.1792.1036@1792.0.1920.1080" timestamp="1607234279103" />
+    <state width="1878" height="303" key="GridCell.Tab.0.center/1792.0.1920.1080/0.23.1792.1037@1792.0.1920.1080" timestamp="1607235084918" />
+    <state width="1878" height="305" key="GridCell.Tab.0.center/1792.0.1920.1080/0.23.1792.1041@1792.0.1920.1080" timestamp="1607136808826" />
+    <state width="1878" height="305" key="GridCell.Tab.0.center/1792.0.1920.1080/0.23.1792.1097@1792.0.1920.1080" timestamp="1607137369213" />
+    <state width="1878" height="303" key="GridCell.Tab.0.left" timestamp="1607235726109">
+      <screen x="1792" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1750" height="318" key="GridCell.Tab.0.left/1792.0.1920.1080/0.0.1792.1120@0.0.1792.1120" timestamp="1607132381305" />
+    <state width="1878" height="303" key="GridCell.Tab.0.left/1792.0.1920.1080/0.0.1792.1120@1792.0.1920.1080" timestamp="1607235726109" />
+    <state width="1878" height="303" key="GridCell.Tab.0.left/1792.0.1920.1080/0.23.1792.1036@1792.0.1920.1080" timestamp="1607234279102" />
+    <state width="1878" height="303" key="GridCell.Tab.0.left/1792.0.1920.1080/0.23.1792.1037@1792.0.1920.1080" timestamp="1607235084917" />
+    <state width="1878" height="305" key="GridCell.Tab.0.left/1792.0.1920.1080/0.23.1792.1041@1792.0.1920.1080" timestamp="1607136808826" />
+    <state width="1878" height="305" key="GridCell.Tab.0.left/1792.0.1920.1080/0.23.1792.1097@1792.0.1920.1080" timestamp="1607137369213" />
+    <state width="1878" height="303" key="GridCell.Tab.0.right" timestamp="1607235726110">
+      <screen x="1792" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1750" height="318" key="GridCell.Tab.0.right/1792.0.1920.1080/0.0.1792.1120@0.0.1792.1120" timestamp="1607132381306" />
+    <state width="1878" height="303" key="GridCell.Tab.0.right/1792.0.1920.1080/0.0.1792.1120@1792.0.1920.1080" timestamp="1607235726110" />
+    <state width="1878" height="303" key="GridCell.Tab.0.right/1792.0.1920.1080/0.23.1792.1036@1792.0.1920.1080" timestamp="1607234279104" />
+    <state width="1878" height="303" key="GridCell.Tab.0.right/1792.0.1920.1080/0.23.1792.1037@1792.0.1920.1080" timestamp="1607235084919" />
+    <state width="1878" height="305" key="GridCell.Tab.0.right/1792.0.1920.1080/0.23.1792.1041@1792.0.1920.1080" timestamp="1607136808827" />
+    <state width="1878" height="305" key="GridCell.Tab.0.right/1792.0.1920.1080/0.23.1792.1097@1792.0.1920.1080" timestamp="1607137369214" />
+    <state width="1878" height="376" key="GridCell.Tab.1.bottom" timestamp="1607235723731">
+      <screen x="1792" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1878" height="376" key="GridCell.Tab.1.bottom/1792.0.1920.1080/0.0.1792.1120@1792.0.1920.1080" timestamp="1607235723731" />
+    <state width="1878" height="376" key="GridCell.Tab.1.center" timestamp="1607235723729">
+      <screen x="1792" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1878" height="376" key="GridCell.Tab.1.center/1792.0.1920.1080/0.0.1792.1120@1792.0.1920.1080" timestamp="1607235723729" />
+    <state width="1878" height="376" key="GridCell.Tab.1.left" timestamp="1607235723729">
+      <screen x="1792" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1878" height="376" key="GridCell.Tab.1.left/1792.0.1920.1080/0.0.1792.1120@1792.0.1920.1080" timestamp="1607235723729" />
+    <state width="1878" height="376" key="GridCell.Tab.1.right" timestamp="1607235723730">
+      <screen x="1792" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1878" height="376" key="GridCell.Tab.1.right/1792.0.1920.1080/0.0.1792.1120@1792.0.1920.1080" timestamp="1607235723730" />
+    <state x="397" y="199" key="SettingsEditor" timestamp="1607072932085">
+      <screen x="0" y="0" width="1792" height="1120" />
+    </state>
+    <state x="397" y="199" key="SettingsEditor/1792.0.1920.1080/0.0.1792.1120@0.0.1792.1120" timestamp="1607072932085" />
+    <state x="2417" y="241" width="670" height="676" key="search.everywhere.popup" timestamp="1607161819032">
+      <screen x="1792" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2417" y="241" width="670" height="676" key="search.everywhere.popup/1792.0.1920.1080/0.0.1792.1120@1792.0.1920.1080" timestamp="1607161819032" />
+  </component>
+</project>
