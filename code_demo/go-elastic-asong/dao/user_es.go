@@ -93,8 +93,23 @@ func (es *UserES) batchAdd(ctx context.Context, user []*model.UserEs) error {
 	if req.NumberOfActions() < 0 {
 		return nil
 	}
-	if _, err := req.Do(ctx); err != nil {
+	res, err := req.Do(ctx)
+	if err != nil {
 		return err
+	}
+	// 任何子请求失败，该 `errors` 标志被设置为 `true` ，并且在相应的请求报告出错误明细
+	// 所以如果没有出错，说明全部成功了，直接返回即可
+	if !res.Errors {
+		return nil
+	}
+	for _, it := range res.Failed() {
+		if it.Error == nil {
+			continue
+		}
+		return &elastic.Error{
+			Status:  it.Status,
+			Details: it.Error,
+		}
 	}
 	return nil
 }
@@ -121,9 +136,25 @@ func (es *UserES) batchUpdate(ctx context.Context, user []*model.UserEs) error {
 	if req.NumberOfActions() < 0 {
 		return nil
 	}
-	if _, err := req.Do(ctx); err != nil {
+	res, err := req.Do(ctx)
+	if err != nil {
 		return err
 	}
+	// 任何子请求失败，该 `errors` 标志被设置为 `true` ，并且在相应的请求报告出错误明细
+	// 所以如果没有出错，说明全部成功了，直接返回即可
+	if !res.Errors {
+		return nil
+	}
+	for _, it := range res.Failed() {
+		if it.Error == nil {
+			continue
+		}
+		return &elastic.Error{
+			Status:  it.Status,
+			Details: it.Error,
+		}
+	}
+	re
 	return nil
 }
 
@@ -149,9 +180,25 @@ func (es *UserES) batchDel(ctx context.Context, user []*model.UserEs) error {
 		return nil
 	}
 
-	if _, err := req.Do(ctx); err != nil {
+	res, err := req.Do(ctx)
+	if err != nil {
 		return err
 	}
+	// 任何子请求失败，该 `errors` 标志被设置为 `true` ，并且在相应的请求报告出错误明细
+	// 所以如果没有出错，说明全部成功了，直接返回即可
+	if !res.Errors {
+		return nil
+	}
+	for _, it := range res.Failed() {
+		if it.Error == nil {
+			continue
+		}
+		return &elastic.Error{
+			Status:  it.Status,
+			Details: it.Error,
+		}
+	}
+	re
 	return nil
 }
 
