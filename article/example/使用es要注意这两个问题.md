@@ -186,7 +186,7 @@ func (es *UserES) batchAdd(ctx context.Context, user []*model.UserEs) error {
 
 **翻译了一份Machinery中文文档，会定期进行维护，有需要的小伙伴们后台回复[machinery]即可获取。**
 
-**我是asong，一名普普通通的程序猿，让gi我一起慢慢变强吧。欢迎各位的关注，我们下期见~~~**
+**我是asong，一名普普通通的程序猿，让我们一起慢慢变强吧。欢迎各位的关注，我们下期见~~~**
 
 ![](https://song-oss.oss-cn-beijing.aliyuncs.com/wx/qrcode_for_gh_efed4775ba73_258.jpg)
 
