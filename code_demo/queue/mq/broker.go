@@ -80,12 +80,20 @@ func (b *BrokerImpl) broadcast(msg interface{}, subscribers []chan interface{}) 
 		concurrency = 1
 	}
 
-	//采用Timer 而不是使用time.After 原因：time.After会产生内存泄漏 在计时器触发之前，垃圾回收器不会回收Timer
-	idleDuration := 5 * time.Millisecond
-	idleTimeout := time.NewTimer(idleDuration)
-	defer idleTimeout.Stop()
+
+
 	pub := func(start int) {
+		//采用Timer 而不是使用time.After 原因：time.After会产生内存泄漏 在计时器触发之前，垃圾回收器不会回收Timer
+		idleDuration := 5 * time.Millisecond
+		idleTimeout := time.NewTimer(idleDuration)
+		defer idleTimeout.Stop()
 		for j := start; j < count; j += concurrency {
+			if !idleTimeout.Stop(){
+				select {
+				case <- idleTimeout.C:
+				default:
+				}
+			}
 			idleTimeout.Reset(idleDuration)
 			select {
 			case subscribers[j] <- msg:
