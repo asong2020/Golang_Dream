@@ -122,7 +122,7 @@ go tool compile -S -N -l main.go > main.s4 2>&1
 
 ![](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/%E6%88%AA%E5%B1%8F2021-04-05%20%E4%B8%8B%E5%8D%884.45.44.png)
 
-我们知道空接口的数据结构中只有两个字段，一个`_type`字段，一个`data`字段，从上图中，我们可以看出来，`eface`的`_type`存储在内存的`+120(SP)`处，`unsafe.Pointer`存在了`+128（SP）`处，现在我们知道了他是怎么存的了，接下来我们看一下空接口的类型推断汇编是怎么实现的：
+我们知道空接口的数据结构中只有两个字段，一个`_type`字段，一个`data`字段，从上图中，我们可以看出来，`eface`的`_type`存储在内存的`+120(SP)`处，`unsafe.Pointer`存在了`+128（SP）`处，现在我们知道了他是怎么存的了，接下来我们看一下空接口的类型断言汇编是怎么实现的：
 
 ```go
 	0x007d 00125 (main.go:13)	PCDATA	$2, $1
@@ -148,7 +148,7 @@ go tool compile -S -N -l main.go > main.s4 2>&1
 	0x00c1 00193 (main.go:14)	CMPB	"".ok+70(SP), $0
 ```
 
-从上面这段汇编我们可以看出来，空接口的类型断言是通过判断`eface`中的`_type`字段和比较的类型就行对比，相同就会去准备接下来的返回值，如果类型推断正确，经过中间临时变量的传递，最终`val`保存在内存中`+72(SP)`处。`ok`保存在内存`+70(SP)`处。
+从上面这段汇编我们可以看出来，空接口的类型断言是通过判断`eface`中的`_type`字段和比较的类型进行对比，相同就会去准备接下来的返回值，如果类型断言正确，经过中间临时变量的传递，最终`val`保存在内存中`+72(SP)`处。`ok`保存在内存`+70(SP)`处。
 
 ```go
 	0x018b 00395 (main.go:15)	XORL	AX, AX
@@ -244,9 +244,9 @@ func main() {
 
 上面代码我们可以看到调用`iface`结构中的`itab`字段，这里为什么这么调用呢？因为我们类型推断的是一个具体的类型，编译器会直接构造出`iface`，不会去调用已经在`runtime/iface.go`实现好的断言方法。上述代码中，先构造出` iface`，其中` *itab `存在内存 `+104(SP) `中，`unsafe.Pointer` 存在 `+112(SP)` 中。然后在类型推断的时候又重新构造了一遍 `*itab`，最后将新的 `*itab` 和前一次 `+104(SP)` 里的` *itab` 进行对比。
 
-后面的赋值操作也就不在细说了，没有什么特别的。
+后面的赋值操作也就不再细说了，没有什么特别的。
 
-这里还有一个要注意的问题，如果我们类型推断的接口类型，那么我们在就会看到这样的汇编代码：
+这里还有一个要注意的问题，如果我们类型断言的是接口类型，那么我们在就会看到这样的汇编代码：
 
 ```go
 // 代码修改
@@ -295,9 +295,9 @@ func assertI2I(inter *interfacetype, i iface) (r iface) {
 
 上述代码逻辑很简单，如果 `iface` 中的` itab.inter` 和第一个入参 `*interfacetype` 相同，说明类型相同，直接返回入参 `iface `的相同类型，布尔值为 `true`；如果` iface` 中的` itab.inter` 和第一个入参 `*interfacetype` 不相同，则重新根据 `*interfacetype` 和 `iface.tab` 去构造` tab`。构造的过程会查找` itabTable`。如果类型不匹配，或者不是属于同一个 `interface `类型，都会失败。`getitab() `方法第三个参数是 `canfail`，这里传入了` true`，表示构建 `*itab `允许失败，失败以后返回 `nil`。
 
-**差异**：如果我们推断的类型是具体类型，编译器会直接构造出`iface`，不会去调用已经在`runtime/iface.go`实现好的断言方法。如果我们推断的类型是接口类型，将会去调用相应的断言方法进行判断。
+**差异**：如果我们断言的类型是具体类型，编译器会直接构造出`iface`，不会去调用已经在`runtime/iface.go`实现好的断言方法。如果我们断言的类型是接口类型，将会去调用相应的断言方法进行判断。
 
-**小结**：**空接口类型推断的实质是 iface 中 `*itab` 的对比。`*itab` 匹配成功会在内存中组装返回值。匹配失败直接清空寄存器，返回默认值。**
+**小结**：**非空接口类型断言的实质是 iface 中 `*itab` 的对比。`*itab` 匹配成功会在内存中组装返回值。匹配失败直接清空寄存器，返回默认值。**
 
 
 
@@ -305,3 +305,159 @@ func assertI2I(inter *interfacetype, i iface) (r iface) {
 
 前面我们已经分析了断言的底层原理，下面我们来看一下不同场景下进行断言的代价。
 
+针对不同的场景可以写出测试文件如下（截取了部分代码，全部代码获取[戳这里](https://github.com/asong2020/Golang_Dream/tree/master/code_demo/assert_test)）: 
+
+```go
+var dst int64
+
+// 空接口类型直接类型断言具体的类型
+func Benchmark_efaceToType(b *testing.B) {
+	b.Run("efaceToType", func(b *testing.B) {
+		var ebread interface{} = int64(666)
+		for i := 0; i < b.N; i++ {
+			dst = ebread.(int64)
+		}
+	})
+}
+
+// 空接口类型使用TypeSwitch 只有部分类型
+func Benchmark_efaceWithSwitchOnlyIntType(b *testing.B) {
+	b.Run("efaceWithSwitchOnlyIntType", func(b *testing.B) {
+		var ebread interface{} = 666
+		for i := 0; i < b.N; i++ {
+			OnlyInt(ebread)
+		}
+	})
+}
+
+// 空接口类型使用TypeSwitch 所有类型
+func Benchmark_efaceWithSwitchAllType(b *testing.B) {
+	b.Run("efaceWithSwitchAllType", func(b *testing.B) {
+		var ebread interface{} = 666
+		for i := 0; i < b.N; i++ {
+			Any(ebread)
+		}
+	})
+}
+
+//直接使用类型转换
+func Benchmark_TypeConversion(b *testing.B) {
+	b.Run("typeConversion", func(b *testing.B) {
+		var ebread int32 = 666
+
+		for i := 0; i < b.N; i++ {
+			dst = int64(ebread)
+		}
+	})
+}
+
+// 非空接口类型判断一个类型是否实现了该接口 两个方法
+func Benchmark_ifaceToType(b *testing.B) {
+	b.Run("ifaceToType", func(b *testing.B) {
+		var iface Basic = &User{}
+		for i := 0; i < b.N; i++ {
+			iface.GetName()
+			iface.SetName("1")
+		}
+	})
+}
+
+// 非空接口类型判断一个类型是否实现了该接口 12个方法
+func Benchmark_ifaceToTypeWithMoreMethod(b *testing.B) {
+	b.Run("ifaceToTypeWithMoreMethod", func(b *testing.B) {
+		var iface MoreMethod = &More{}
+		for i := 0; i < b.N; i++ {
+			iface.Get()
+			iface.Set()
+			iface.One()
+			iface.Two()
+			iface.Three()
+			iface.Four()
+			iface.Five()
+			iface.Six()
+			iface.Seven()
+			iface.Eight()
+			iface.Nine()
+			iface.Ten()
+		}
+	})
+}
+
+// 直接调用方法
+func Benchmark_DirectlyUseMethod(b *testing.B) {
+	b.Run("directlyUseMethod", func(b *testing.B) {
+		m := &More{
+			Name: "asong",
+		}
+		m.Get()
+	})
+}
+```
+
+运行结果：
+
+```go
+goos: darwin
+goarch: amd64
+pkg: asong.cloud/Golang_Dream/code_demo/assert_test
+Benchmark_efaceToType/efaceToType-16            1000000000               0.507 ns/op
+Benchmark_efaceWithSwitchOnlyIntType/efaceWithSwitchOnlyIntType-16              384958000                3.00 ns/op
+Benchmark_efaceWithSwitchAllType/efaceWithSwitchAllType-16                      351172759                3.33 ns/op
+Benchmark_TypeConversion/typeConversion-16                                      1000000000               0.473 ns/op
+Benchmark_ifaceToType/ifaceToType-16                                            355683139                3.38 ns/op
+Benchmark_ifaceToTypeWithMoreMethod/ifaceToTypeWithMoreMethod-16                85421563                12.8 ns/op
+Benchmark_DirectlyUseMethod/directlyUseMethod-16                                1000000000               0.000000 ns/op
+PASS
+ok      asong.cloud/Golang_Dream/code_demo/assert_test  7.797s
+```
+
+从结果我们可以分析一下：
+
+- 空接口类型的类型断言代价并不高，与直接类型转换几乎没有性能差异
+- 空接口类型使用`type switch`进行类型断言时，随着`case`的增多性能会直线下降
+- 非空接口类型进行类型断言时，随着接口中方法的增多，性能会直线下降
+- 直接进行方法调用要比非接口类型进行类型断言要高效很多
+
+好啦，现在我们也知道怎样使用类型断言能提高性能啦，又可以和同事吹水一手啦。
+
+
+
+## 总结
+
+好啦，本文到这里就已经接近尾声了，在最后做一个小小的总结：
+
+- 空接口类型断言实现流程：空接口类型断言实质是将`eface`中`_type`与要匹配的类型进行对比，匹配成功在内存中组装返回值，匹配失败直接清空寄存器，返回默认值。
+- 非空接口类型断言的实质是 iface 中 `*itab` 的对比。`*itab` 匹配成功会在内存中组装返回值。匹配失败直接清空寄存器，返回默认值
+
+- 泛型是在编译期做的事情，使用类型断言会消耗一点性能，类型断言使用方式不同，带来的性能损耗也不同，具体请看上面的章节。
+
+**文中代码已上传`github`：https://github.com/asong2020/Golang_Dream/tree/master/code_demo/assert_test，欢迎`star`**
+
+**好啦，这篇文章就到这里啦，素质三连（分享、点赞、在看）都是笔者持续创作更多优质内容的动力！**
+
+**创建了一个Golang学习交流群，欢迎各位大佬们踊跃入群，我们一起学习交流。入群方式：加我vx拉你入群，或者公众号获取入群二维码**
+
+**结尾给大家发一个小福利吧，最近我在看[微服务架构设计模式]这一本书，讲的很好，自己也收集了一本PDF，有需要的小伙可以到自行下载。获取方式：关注公众号：[Golang梦工厂]，后台回复：[微服务]，即可获取。**
+
+**我翻译了一份GIN中文文档，会定期进行维护，有需要的小伙伴后台回复[gin]即可下载。**
+
+**翻译了一份Machinery中文文档，会定期进行维护，有需要的小伙伴们后台回复[machinery]即可获取。**
+
+**我是asong，一名普普通通的程序猿，让我们一起慢慢变强吧。欢迎各位的关注，我们下期见~~~**
+
+![](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/%E6%89%AB%E7%A0%81_%E6%90%9C%E7%B4%A2%E8%81%94%E5%90%88%E4%BC%A0%E6%92%AD%E6%A0%B7%E5%BC%8F-%E7%99%BD%E8%89%B2%E7%89%88.png)
+
+推荐往期文章：
+
+- [Go看源码必会知识之unsafe包](https://mp.weixin.qq.com/s/nPWvqaQiQ6Z0TaPoqg3t2Q)
+- [源码剖析panic与recover，看不懂你打我好了！](https://mp.weixin.qq.com/s/mzSCWI8C_ByIPbb07XYFTQ)
+- [详解并发编程基础之原子操作(atomic包)](https://mp.weixin.qq.com/s/PQ06eL8kMWoGXodpnyjNcA)
+- [详解defer实现机制](https://mp.weixin.qq.com/s/FUmoBB8OHNSfy7STR0GsWw)
+- [空结构体引发的大型打脸现场](https://mp.weixin.qq.com/s/dNeCIwmPei2jEWGF6AuWQw)
+- [Leaf—Segment分布式ID生成系统（Golang实现版本）](https://mp.weixin.qq.com/s/wURQFRt2ISz66icW7jbHFw)
+- [十张动图带你搞懂排序算法(附go实现代码)](https://mp.weixin.qq.com/s/rZBsoKuS-ORvV3kML39jKw)
+- [go参数传递类型](https://mp.weixin.qq.com/s/JHbFh2GhoKewlemq7iI59Q)
+- [手把手教姐姐写消息队列](https://mp.weixin.qq.com/s/0MykGst1e2pgnXXUjojvhQ)
+- [常见面试题之缓存雪崩、缓存穿透、缓存击穿](https://mp.weixin.qq.com/s?__biz=MzIzMDU0MTA3Nw==&mid=2247483988&idx=1&sn=3bd52650907867d65f1c4d5c3cff8f13&chksm=e8b0902edfc71938f7d7a29246d7278ac48e6c104ba27c684e12e840892252b0823de94b94c1&token=1558933779&lang=zh_CN#rd)
+- [详解Context包，看这一篇就够了！！！](https://mp.weixin.qq.com/s/JKMHUpwXzLoSzWt_ElptFg)
+- [面试官：你能用Go写段代码判断当前系统的存储方式吗?](https://mp.weixin.qq.com/s/ffEsTpO-tyNZFR5navAbdA)

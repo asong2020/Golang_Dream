@@ -52,7 +52,8 @@ func Benchmark_ifaceToType(b *testing.B) {
 	b.Run("ifaceToType", func(b *testing.B) {
 		var iface Basic = &User{}
 		for i := 0; i < b.N; i++ {
-			iface.(*User).GetName()
+			iface.GetName()
+			iface.SetName("1")
 		}
 	})
 }
@@ -62,7 +63,18 @@ func Benchmark_ifaceToTypeWithMoreMethod(b *testing.B) {
 	b.Run("ifaceToTypeWithMoreMethod", func(b *testing.B) {
 		var iface MoreMethod = &More{}
 		for i := 0; i < b.N; i++ {
-			iface.(*More).Get()
+			iface.Get()
+			iface.Set()
+			iface.One()
+			iface.Two()
+			iface.Three()
+			iface.Four()
+			iface.Five()
+			iface.Six()
+			iface.Seven()
+			iface.Eight()
+			iface.Nine()
+			iface.Ten()
 		}
 	})
 }
