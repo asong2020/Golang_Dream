@@ -154,7 +154,7 @@ func (es *UserES) batchUpdate(ctx context.Context, user []*model.UserEs) error {
 			Details: it.Error,
 		}
 	}
-	re
+
 	return nil
 }
 
@@ -198,7 +198,7 @@ func (es *UserES) batchDel(ctx context.Context, user []*model.UserEs) error {
 			Details: it.Error,
 		}
 	}
-	re
+
 	return nil
 }
 
