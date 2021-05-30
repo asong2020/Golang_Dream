@@ -6,3 +6,115 @@
 
 ## 什么是可重入锁
 
+之前写过`java`的同学对这个概念应该了如指掌，可重入锁又称为递归锁，是指在同一个线程在外层方法获取锁的时候，在进入该线程的内层方法时会自动获取锁，不会因为之前已经获取过还没释放而阻塞。[美团技术团队](https://tech.meituan.com/2018/11/15/java-lock.html)的一篇关于锁的文章当中针对可重入锁进行了举例：
+
+假设现在有多个村民在水井排队打水，有官管理员正在看管这口水井，村民在打水时，管理员允许锁和同一个人的多个水桶绑定，这个人用多个水桶打水时，第一个水桶和锁绑定并打完水之后，第二个水桶也可以直接和锁绑定并开始打水，所有的水桶都打完水之后打水人才会将锁还给管理员。这个人的所有打水流程都能够成功执行，后续等待的人也能够打到水。这就是可重入锁。
+
+下图摘自美团技术团队分享的文章：
+
+![](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/%E6%88%AA%E5%B1%8F2021-05-29%20%E4%B8%8B%E5%8D%884.30.49.png)
+
+如果是非可重入锁，，此时管理员只允许锁和同一个人的一个水桶绑定。第一个水桶和锁绑定打完水之后并不会释放锁，导致第二个水桶不能和锁绑定也无法打水。当前线程出现死锁，整个等待队列中的所有线程都无法被唤醒。
+
+下图依旧摘自美团技术团队分享的文章：
+
+![](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/%E6%88%AA%E5%B1%8F2021-05-29%20%E4%B8%8B%E5%8D%884.32.01.png)
+
+
+
+## 用`Go`实现可重入锁
+
+既然我们想自己实现一个可重入锁，那我们就要了解`java`中可重入锁是如何实现的，查看了`ReentrantLock`的源码，大致实现思路如下：
+
+`ReentrantLock`继承了父类`AQS`，其父类`AQS`中维护了一个同步状态`status`来计数重入次数，`status`初始值为`0`，当线程尝试获取锁时，可重入锁先尝试获取并更新`status`值，如果`status == 0`表示没有其他线程在执行同步代码，则把`status`置为`1`，当前线程开始执行。如果`status != 0`，则判断当前线程是否是获取到这个锁的线程，如果是的话执行`status+1`，且当前线程可以再次获取锁。释放锁时，可重入锁同样先获取当前`status`的值，在当前线程是持有锁的线程的前提下。如果`status-1 == 0`，则表示当前线程所有重复获取锁的操作都已经执行完毕，然后该线程才会真正释放锁。
+
+总结一下实现一个可重入锁需要这两点：
+
+- 记住持有锁的线程
+- 统计重入的次数
+
+统计重入的次数很容易实现，接下来我们考虑一下怎么实现记住持有锁的线程？
+
+我们都知道`Go`语言最大的特色就是从语言层面支持并发，`Goroutine`是`Go`中最基本的执行单元，每一个`Go`程序至少有一个`Goroutine`，主程序也是一个`Goroutine`，称为主`Goroutine`，当程序启动时，他会自动创建。每个`Goroutine`也是有自己唯一的编号，这个编号只有在`panic`场景下才会看到，`Go语言`却刻意没有提供获取该编号的接口，官方给出的原因是为了避免滥用。但是我们还是通过一些特殊手段来获取`Goroutine ID`的，可以使用`runtime.Stack`函数输出当前栈帧信息，然后解析字符串获取`Goroutine ID`，具体代码可以参考开源项目 - [goid](https://github.com/petermattis/goid/blob/master/goid.go)。
+
+因为`go`语言中的`Goroutine`有`Goroutine ID`，那么我们就可以通过这个来记住当前的线程，通过这个来判断是否持有锁，就可以了，因此我们可以定义如下结构体：
+
+```go
+type ReentrantLock struct {
+	lock *sync.Mutex
+	cond *sync.Cond
+	recursion int32
+	host     int64
+}
+```
+
+其实就是包装了`Mutex`锁，使用`host`字段记录当前持有锁的`goroutine id`，使用`recursion`字段记录当前`goroutine`的重入次数。这里有一个特别要说明的就是`sync.Cond`，使用`Cond`的目的是，当多个`Goroutine`使用相同的可重入锁时，通过`cond`可以对多个协程进行协调，如果有其他协程正在占用锁，则当前协程进行阻塞，直到其他协程调用释放锁。具体`sync.Cond`的使用大家可以参考我之前的一篇文章：[源码剖析sync.cond(条件变量的实现机制）](https://mp.weixin.qq.com/s/szSxatDakPQMUA8Vm9u3qQ)。
+
+- 构造函数
+
+```go
+
+func NewReentrantLock()  sync.Locker{
+	res := &ReentrantLock{
+		lock: new(sync.Mutex),
+		recursion: 0,
+		host: 0,
+	}
+	res.cond = sync.NewCond(res.lock)
+	return res
+}
+```
+
+- `Lock`
+
+```go
+func (rt *ReentrantLock) Lock()  {
+	id := GetGoroutineID()
+	rt.lock.Lock()
+	defer rt.lock.Unlock()
+
+	if rt.host == id{
+		rt.recursion++
+		return
+	}
+
+	for rt.recursion != 0{
+		rt.cond.Wait()
+	}
+	rt.host = id
+	rt.recursion = 1
+}
+```
+这里逻辑比较简单，大概解释一下：
+
+首先我们获取当前`Goroutine`的`ID`，然后我们添加互斥锁锁住当前代码块，保证并发安全，如果当前`Goroutine`正在占用锁，则增加`resutsion`的值，记录当前线程加锁的数量，然后返回即可。如果当前`Goroutine`没有占用锁，则判断当前可重入锁是否被其他`Goroutine`占用，如果有其他`Goroutine`正在占用可重入锁，则调用`cond.wait`方法进行阻塞，直到其他协程释放锁。
+
+- `Unlock`
+
+```go
+func (rt *ReentrantLock) Unlock()  {
+	rt.lock.Lock()
+	defer rt.lock.Unlock()
+
+	if rt.recursion == 0 || rt.host != GetGoroutineID() {
+		panic(fmt.Sprintf("the wrong call host: (%d); current_id: %d; recursion: %d", rt.host,GetGoroutineID(),rt.recursion))
+	}
+
+	rt.recursion--
+	if rt.recursion == 0{
+		rt.cond.Signal()
+	}
+}
+```
+
+大概解释如下：
+
+首先我们添加互斥锁锁住当前代码块，保证并发安全，释放可重入锁时，如果非持有锁的`Goroutine`释放锁则会导致程序出现`panic`，这个一般是由于用户用法错误导致的。如果当前`Goroutine`释放了锁，则调用`cond.Signal`唤醒其他协程。
+
+
+
+测试例子就不在这里贴了，代码已上传
+
+
+
+## 
