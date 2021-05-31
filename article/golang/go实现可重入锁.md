@@ -8,7 +8,7 @@
 
 之前写过`java`的同学对这个概念应该了如指掌，可重入锁又称为递归锁，是指在同一个线程在外层方法获取锁的时候，在进入该线程的内层方法时会自动获取锁，不会因为之前已经获取过还没释放而阻塞。[美团技术团队](https://tech.meituan.com/2018/11/15/java-lock.html)的一篇关于锁的文章当中针对可重入锁进行了举例：
 
-假设现在有多个村民在水井排队打水，有官管理员正在看管这口水井，村民在打水时，管理员允许锁和同一个人的多个水桶绑定，这个人用多个水桶打水时，第一个水桶和锁绑定并打完水之后，第二个水桶也可以直接和锁绑定并开始打水，所有的水桶都打完水之后打水人才会将锁还给管理员。这个人的所有打水流程都能够成功执行，后续等待的人也能够打到水。这就是可重入锁。
+假设现在有多个村民在水井排队打水，有管理员正在看管这口水井，村民在打水时，管理员允许锁和同一个人的多个水桶绑定，这个人用多个水桶打水时，第一个水桶和锁绑定并打完水之后，第二个水桶也可以直接和锁绑定并开始打水，所有的水桶都打完水之后打水人才会将锁还给管理员。这个人的所有打水流程都能够成功执行，后续等待的人也能够打到水。这就是可重入锁。
 
 下图摘自美团技术团队分享的文章：
 
@@ -113,8 +113,82 @@ func (rt *ReentrantLock) Unlock()  {
 
 
 
-测试例子就不在这里贴了，代码已上传
+测试例子就不在这里贴了，代码已上传`github`:https://github.com/asong2020/Golang_Dream/tree/master/code_demo/reentrantLock，欢迎star。
 
 
 
-## 
+## 为什么`Go`语言中没有互斥锁
+
+这问题的答案，我在：https://stackoverflow.com/questions/14670979/recursive-locking-in-go#14671462，这里找到了答案。`Go`语言的发明者认为，如果当你的代码需要重入锁时，那就说明你的代码有问题了，我们正常写代码时，从入口函数开始，执行的层次都是一层层往下的，如果有一个锁需要共享给几个函数，那么就在调用这几个函数的上面，直接加上互斥锁就好了，不需要在每一个函数里面都添加锁，再去释放锁。
+
+举个例子，假设我们现在一段这样的代码：
+
+```go
+func F() {
+	mu.Lock()
+	//... do some stuff ...
+	G()
+	//... do some more stuff ...
+	mu.Unlock()
+}
+
+func G() {
+	mu.Lock()
+	//... do some stuff ...
+	mu.Unlock()
+}
+```
+
+函数`F()`和`G()`使用了相同的互斥锁，并且都在各自函数内部进行了加锁，这要使用就会出现死锁，使用**可重入锁**可以解决这个问题，但是更好的方法是改变我们的代码结构，我们进行分解代码，如下：
+
+```go
+
+func call(){
+  F()
+  G()
+}
+
+func F() {
+      mu.Lock()
+      ... do some stuff
+      mu.Unlock()
+}
+
+func g() {
+     ... do some stuff ...
+}
+
+func G() {
+     mu.Lock()
+     g()
+     mu.Unlock()
+}
+```
+
+这样不仅避免了死锁，而且还对代码进行了解耦。这样的代码按照作用范围进行了分层，就像金字塔一样，上层调用下层的函数，越往上作用范围越大；各层有自己的锁。
+
+总结：`Go`语言中完全没有必要使用可重入锁，如果我们发现我们的代码要使用到可重入锁了，那一定是我们写的代码有问题了，请检查代码结构，修改他！！！
+
+
+
+## 总结
+
+这篇文章我们知道了什么是可重入锁，并用`Go`语言实现了**可重入锁**，大家只需要知道这个概念就好了，实际开发中根本不需要。最后还是建议大家没事多思考一下自己的代码结构，好的代码都是经过深思熟虑的，最后希望大家都能写出漂亮的代码。
+
+**好啦，这篇文章到此结束啦，素质三连（分享、点赞、在看）都是笔者持续创作更多优质内容的动力！我是`asong`，我们下期见。**
+
+**创建了一个Golang学习交流群，欢迎各位大佬们踊跃入群，我们一起学习交流。入群方式：关注公众号获取。更多学习资料请到公众号领取。**
+
+![](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/%E6%89%AB%E7%A0%81_%E6%90%9C%E7%B4%A2%E8%81%94%E5%90%88%E4%BC%A0%E6%92%AD%E6%A0%B7%E5%BC%8F-%E6%A0%87%E5%87%86%E8%89%B2%E7%89%88.png)
+
+推荐往期文章：
+
+- [Go看源码必会知识之unsafe包](https://mp.weixin.qq.com/s/nPWvqaQiQ6Z0TaPoqg3t2Q)
+- [Go语言中new和make你使用哪个来分配内存？](https://mp.weixin.qq.com/s/XJ9O9O4KS3LbZL0jYnJHPg)
+- [源码剖析panic与recover，看不懂你打我好了！](https://mp.weixin.qq.com/s/mzSCWI8C_ByIPbb07XYFTQ)
+- [空结构体引发的大型打脸现场](https://mp.weixin.qq.com/s/dNeCIwmPei2jEWGF6AuWQw)
+- [Leaf—Segment分布式ID生成系统（Golang实现版本）](https://mp.weixin.qq.com/s/wURQFRt2ISz66icW7jbHFw)
+- [面试官：两个nil比较结果是什么？](https://mp.weixin.qq.com/s/Dt46eoEXXXZc2ymr67_LVQ)
+- [面试官：你能用Go写段代码判断当前系统的存储方式吗?](https://mp.weixin.qq.com/s/ffEsTpO-tyNZFR5navAbdA)
+- [如何平滑切换线上Elasticsearch索引](https://mp.weixin.qq.com/s/8VQxK_Xh-bkVoOdMZs4Ujw)
+

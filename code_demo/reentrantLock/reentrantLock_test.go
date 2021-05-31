@@ -49,3 +49,4 @@ func TestMuliteGoroutine(t *testing.T)  {
 	}
 	time.Sleep(10 * time.Second)
 }
+
