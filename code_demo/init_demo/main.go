@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"sort"
 )
 
 // 查找一个数在数组中下标的位置 (递归实现)
@@ -61,11 +60,14 @@ func binarySearch(target int64, nums []int64) int {
 }
 
 func main() {
-	nums := []int64{1, 2, 3, 4, 5, 6, 7}
-
-	//fmt.Println(Search(nums, 1))
-	//fmt.Println(binarySearch(1, nums))
-	fmt.Println(sort.Search(len(nums), func(i int) bool{
-		return nums[i] >= 10
-	}))
+	//nums := []int64{1, 2, 3, 4, 5, 6, 7}
+	//
+	////fmt.Println(Search(nums, 1))
+	////fmt.Println(binarySearch(1, nums))
+	//fmt.Println(sort.Search(len(nums), func(i int) bool{
+	//	return nums[i] >= 10
+	//}))
+	var a uint = 100
+	var b uint = 10
+	fmt.Println(b - a)
 }
