@@ -42,7 +42,7 @@ func main()  {
 
 这里我们运行了两个`Goroutine`，在`GoroutineOne`中我们向`channel`中写入数据，在`GoroutineTwo`中我们监听`channel`，直到读取到"asong真帅"。我们可以画一个简单的图来表明一下这个顺序：
 
-![](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/%E6%88%AA%E5%B1%8F2021-06-25%20%E4%B8%8B%E5%8D%883.28.05.png)
+![](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/%E6%88%AA%E5%B1%8F2021-06-30%20%E4%B8%8A%E5%8D%889.27.21.png)
 
 上面的例子是对无缓冲`channel`的一个简单应用，其实`channel`的使用语法还是挺多的，下面且听我慢慢道来，毕竟是从入门到放弃嘛，那就先从入门开始。
 
