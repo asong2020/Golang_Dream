@@ -1,13 +1,9 @@
 package main
 
-import (
-	"fmt"
-)
-
-func main(){
-	s := []int{10,12,3,14}
-	fmt.Println(GetMaxValue(s))
-}
+//func main(){
+//	s := []int{10,12,3,14}
+//	fmt.Println(GetMaxValue(s))
+//}
 
 func GetMaxValue(s []int) int {
 	max :=0

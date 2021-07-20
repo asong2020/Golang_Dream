@@ -4,18 +4,26 @@ import (
 	"testing"
 )
 
-func BenchmarkMaxNoinline(b *testing.B) {
-	x := []int{1,2,3,4}
+//go:noinline
+func AddNoinline(x,y,z int) int {
+	return x+y+z
+}
+
+func AddInline(x,y,z int) int {
+	return x+y+z
+}
+func BenchmarkAddNoinline(b *testing.B) {
+	x,y,z :=1,2,3
 	b.ResetTimer()
 	for i:=0;i<b.N;i++{
-		MaxNoinline(x)
+		AddNoinline(x,y,z)
 	}
 }
 
-func BenchmarkMaxInline(b *testing.B) {
-	x := []int{1,2,3,4}
+func BenchmarkAddInline(b *testing.B) {
+	x,y,z :=1,2,3
 	b.ResetTimer()
 	for i:=0;i<b.N;i++{
-		MaxInline(x)
+		AddInline(x,y,z)
 	}
 }
