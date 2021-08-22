@@ -1,6 +1,10 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"time"
+
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
 	r := gin.Default()
@@ -8,6 +12,7 @@ func main() {
 	r0 := r.Group("/api")
 	{
 		r.GET("/pong", func(context *gin.Context) {
+			time.Sleep(4 * time.Second)
 			context.JSON(200,gin.H{
 				"message": "pong",
 			})
