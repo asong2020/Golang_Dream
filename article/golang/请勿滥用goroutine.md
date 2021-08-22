@@ -19,13 +19,31 @@ go func() {
 
 这段代码通过`generate()`方法获得一个`channel`，然后启动一个`goroutine`一直去处理这个`channel`的数据，这个`goroutine`什么时候会退出？答案是不确定，`ch`是由函数`generate()`来决定的，所以有可能这个`goroutine`永远都不会退出，这就有可能会引发内存泄漏。
 
-`goroutine`就是`G-P-M`调度模型中的`G`，我们可以把`goroutine`看成是一种协程，创建`goroutine`也是有开销的，但是开销很小，初始只需要`2-4k`的栈空间，当`goroutine`数量越来越大时，同时存在的`goroutine`也越来越多时，程序就隐藏着内存泄漏的问题。
+`goroutine`就是`G-P-M`调度模型中的`G`，我们可以把`goroutine`看成是一种协程，创建`goroutine`也是有开销的，但是开销很小，初始只需要`2-4k`的栈空间，当`goroutine`数量越来越大时，同时存在的`goroutine`也越来越多时，程序就隐藏着内存泄漏的问题。看一个例子：
+
+```go
+func main()  {
+	for i := 0; i < math.MaxInt64; i++ {
+		go func(i int) {
+			time.Sleep(5 * time.Second)
+		}(i)
+	}
+}
+```
+
+大家可以在自己的电脑上运行一下这个程序，观察一下`CPU`和内存占用情况，我说下我运行后的现象：
+
+![截屏2021-08-22 下午12.40.49](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/%E6%88%AA%E5%B1%8F2021-08-22%20%E4%B8%8B%E5%8D%8812.40.49.png)![截屏2021-08-22 下午12.41.05](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/%E6%88%AA%E5%B1%8F2021-08-22%20%E4%B8%8B%E5%8D%8812.41.05.png)
+
+- CPU使用率疯狂上涨
+- 内存占用率也不断上涨
+- 运行一段时间后主进程崩溃了。。。
 
 因此每次在编写`GO`程序时，都应该仔细考虑一个问题：
 
 > 您将要启动的`goroutine`将如何以及在什么条件下结束？
 
-接下来我们就来看一看有什么方式可以控制`goroutine`和`goroutine`的数量。
+接下来我们就来介绍几种方式可以控制`goroutine`和`goroutine`的数量。
 
 ## 控制`goroutine`的方法
 
@@ -293,7 +311,7 @@ func main()  {
 
 本文主要目的是介绍控制`goroutine`的几种方式、控制`goroutine`数量的几种方式，`goroutine`的创建成本低、效率高带来了很大优势，同时也会有一些弊端，这就需要我们在实际开发中根据具体场景选择正确的方式使用`goroutine`，本文介绍的技术方案也可能是片面的，如果你有更好的方式可以在评论区中分享出来，我们大家一起学习学习～。
 
-文中代码已经上传github，欢迎star：
+文中代码已经上传github，欢迎star：https://github.com/asong2020/Golang_Dream/tree/master/code_demo/goroutine_demo
 
 **素质三连（分享、点赞、在看）都是笔者持续创作更多优质内容的动力！我是`asong`，我们下期见。**
 
