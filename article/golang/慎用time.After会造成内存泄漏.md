@@ -132,7 +132,7 @@ $ go tool pprof http://127.0.0.1:6060/debug/pprof/profile -seconds 60
 
 进入命令行交互模式后，我们输入`top`命令查看内存占用情况。
 
-<img src="./images/top.png" style="zoom:50%;" />
+<img src="../images/top.png" style="zoom:50%;" />
 
 第一次接触的不知道这些参数的意思，我们先来解释一下各个参数吧，`top`会列出5个统计数据：
 
@@ -151,7 +151,7 @@ $ go tool pprof -http=:8081 ~/pprof/pprof.samples.cpu.001.pb.gz
 
 浏览器会自动弹出，看下图：
 
-<img src="./images/pprof.png" style="zoom:50%;" />
+<img src="../images/pprof.png" style="zoom:50%;" />
 
 我们可以看到`time.NewTimer`这个方法导致调用链占了很长时间，占用CPU很长时间，这种方法可以帮我定位到出现问题的代码，还是很方便的。知道了什么问题，接下来我们就来分析一下原因吧。
 

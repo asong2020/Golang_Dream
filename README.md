@@ -7,9 +7,10 @@
 
 **关注公众号**，第一时间观看优质文章，第一时间获取资料。
 
-![公众号图片](https://song-oss.oss-cn-beijing.aliyuncs.com/wx/qrcode_for_gh_efed4775ba73_258.jpg)
+![公众号图片](https://song-oss.oss-cn-beijing.aliyuncs.com/wx/qrcode_for_gh_169729c17b9c_344.jpg)
 
 **QQ交流群**
+
 
 <img src="https://song-oss.oss-cn-beijing.aliyuncs.com/wx/WechatIMG1094.jpeg" style="zoom:50%;" />
 
@@ -21,7 +22,7 @@
 Golang梦工厂
 ├── ChatRoom -- 多人聊天室项目
 ├── MyEpoch -- 论文神器安装包
-├── code_demo -- 代码样例
+├── code_demo -- 文章中的代码样例
 		└──module_demo -- go modules 代码样例
 		└──grpc_demo -- gRPC 实践代码样例
     └──log_analysis -- 日志分析并倒出excel
