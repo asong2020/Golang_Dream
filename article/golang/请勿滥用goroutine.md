@@ -19,7 +19,7 @@ go func() {
 
 这段代码通过`generate()`方法获得一个`channel`，然后启动一个`goroutine`一直去处理这个`channel`的数据，这个`goroutine`什么时候会退出？答案是不确定，`ch`是由函数`generate()`来决定的，所以有可能这个`goroutine`永远都不会退出，这就有可能会引发内存泄漏。
 
-`goroutine`就是`G-P-M`调度模型中的`G`，我们可以把`goroutine`看成是一种协程，创建`goroutine`也是有开销的，但是开销很小，初始只需要`2-4k`的栈空间，当`goroutine`数量越来越大时，同时存在的`goroutine`也越来越多时，程序就隐藏着内存泄漏的问题。看一个例子：
+`goroutine`就是`G-P-M`调度模型中的`G`，我们可以把`goroutine`看成是一种协程，创建`goroutine`也是有开销的，但是开销很小，初始只需要`2-4k`的栈空间，当`goroutine`数量越来越大时，同时存在的`goroutine`也越来越多时，程序就隐藏内存泄漏的问题。看一个例子：
 
 ```go
 func main()  {

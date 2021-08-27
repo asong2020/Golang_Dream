@@ -40,13 +40,13 @@ func printNumber(args ...int64)  { //这里定义的args就是形式参数
 
 值传递，我们分析其字面意思：传递的就是值。传值的意思是：函数传递的总是原来这个东西的一个副本，一副拷贝。比如我们传递一个`int`类型的参数，传递的其实是这个参数的一个副本；传递一个指针类型的参数，其实传递的是这个该指针的一份拷贝，而不是这个指针指向的值。我们画个图来解释一下：
 
-<img src="./images/value.png" style="zoom:50%;" />
+<img src="https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/value.png" style="zoom:50%;" />
 
 ## 什么是引用传递
 
 学习过其他语言的同学，对这个引用传递应该很熟悉，比如`C++`使用者，在C++中，函数参数的传递方式有引用传递。所谓**引用传递**是指在调用函数时将实际参数的地址传递到函数中，那么在函数中对参数所进行的修改，将影响到实际参数。
 
-<img src="./images/poniter.png" style="zoom:50%;" />
+<img src="https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/poniter.png" style="zoom:50%;" />
 
 ## golang是值传递
 
@@ -103,7 +103,7 @@ func modifiedNumber(addr *int64)  { //这里定义的args就是形式参数
 
 所以通过输出我们可以看到，这是一个指针的拷贝，因为存放这两个指针的内存地址是不同的，虽然指针的值相同，但是是两个不同的指针。
 
-<img src="./images/sl-3.png" style="zoom:50%;" />
+<img src="https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/sl-3.png" style="zoom:50%;" />
 
 通过上面的图，我们可以更好的理解。我们声明了一个变量`args`，其值为`1`，并且他的内存存放地址是`0xc0000b4008`，通过这个地址，我们就可以找到变量`args`，这个地址也就是变量`args`的指针`addr`。指针`addr`也是一个指针类型的变量，它也需要内存存放它，它的内存地址是多少呢？是`0xc0000ae018`。 在我们传递指针变量`addr`给`modifiedNumber`函数的时候，是该指针变量的拷贝,所以新拷贝的指针变量`addr`，它的内存地址已经变了，是新的`0xc0000ae028`。所以，不管是`0xc0000ae018`还是`0xc0000ae028`，我们都可以称之为指针的指针，他们指向同一个指针`0xc0000b4008`，这个`0xc0000b4008`又指向变量`args`,这也就是为什么我们可以修改变量`args`的值。
 

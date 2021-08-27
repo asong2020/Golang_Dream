@@ -32,7 +32,7 @@
 
 任务队列，简而言之就是一个放大的生产者消费者模型，用户请求会生成任务，任务生产者不断的向队列中插入任务，同时，队列的处理器程序充当消费者不断的消费任务。基于这种框架设计思想，我们来看下machinery的简单设计结构图例：
 
-![](./images/jiagou.png)
+![](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/jiagou.png)
 
 - Sender：业务推送模块，生成具体任务，可根据业务逻辑中，按交互进行拆分；
 - Broker：存储具体序列化后的任务，machinery中目前支持到Redis, AMQP,和SQS；
@@ -210,7 +210,7 @@ func Sum(args []int64) (int64, error) {
 
 `Group` 是一组任务，它们将相互独立地并行执行。还是画个图吧，这样看起来更明了：
 
-![](./images/group.png)
+![](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/group.png)
 
 一起来看一个简单的例子：
 
@@ -247,7 +247,7 @@ func Sum(args []int64) (int64, error) {
 
 我们在做项目时，往往会有一些回调场景，`machiney`也为我们考虑到了这一点，`Chord`允许你定一个回调任务在`groups`中的所有任务执行结束后被执行。
 
-![](./images/chords.png)
+![](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/chords.png)
 
 来看一段代码：
 
@@ -293,7 +293,7 @@ callback := &tasks.Signature{
 
 `chain`就是一个接一个执行的任务集，每个成功的任务都会触发`chain`中的下一个任务。
 
-![](./images/chains.png)
+![](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/chains.png)
 
 看这样一段代码：
 

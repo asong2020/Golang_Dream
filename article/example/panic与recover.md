@@ -1,6 +1,6 @@
 ## 前言
 
-> 哈喽，大家好，我是`asong`，今天与大家来聊一聊`go`语言中的"throw、try.....catch{}"。如果你之前是一名`java`程序员，我相信你一定吐槽过`go`语言错误处理方式，但是这篇文章不是来讨论好坏的，我们本文的重点是带着大家看一看`panic`与`recover`是如何实现的。上一文我们讲解了[`defer`是如何实现的](https://mp.weixin.qq.com/s/FUmoBB8OHNSfy7STR0GsWw)，但是没有讲解与`defer`紧密相连的`recover`，想搞懂`panic`与`recover`的实现也没那么简单，就放到这一篇来讲解了。废话不多说，直接开整。
+> 哈喽，大家好，我是`asong`，今天与大家来聊一聊`go`语言中的"throw、try.....catch{}"。如果你之前是一名`java`程序员，我相信你一定吐槽过`go`语言错误处理方式，但是这篇文章不是来讨论好坏的，我们本文的重点是带着大家看一看`panic`与`recover`是如何实现的。上一文我们讲解了[`defer`是如何实现的](https://mp.weixin.qq.com/s/FUmoBB8OHNSfy7STR0GsWw)，但是没有讲解与`defoer`紧密相连的`recover`，想搞懂`panic`与`recover`的实现也没那么简单，就放到这一篇来讲解了。废话不多说，直接开整。
 
 
 
@@ -201,7 +201,7 @@ func main()  {
 
 执行`go tool compile -N -l -S main.go`就可以看到对应的汇编码了，我们截取部分片段分析：
 
-<img src="./images/panic.png" style="zoom: 67%;" />
+<img src="https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/panic.png" style="zoom: 67%;" />
 
 上面重点部分就是画红线的三处，第一步调用`runtime.deferprocStack`创建`defer`对象，这一步大家可能会有疑惑，我上一文忘记讲个这个了，这里先简单概括一下，`defer`总共有三种模型，编译一个函数里只会有一种`defer`模式
 
@@ -213,7 +213,7 @@ func main()  {
 
 第二个红线在程序发生`panic`时会调用`runtime.gopanic`，现在程序处于`panic`状态，在函数返回时调用`runtime.deferreturn`，也就是调用延迟函数处理。上面这一步是主程序执行部分，下面我们在看一下延迟函数中的执行：
 
-<img src="./images/recover.png" style="zoom:67%;" />
+<img src="https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/recover.png" style="zoom:67%;" />
 
 这里最重点的就只有一个，调用`runtime.gorecover`，也就是在这一步，对主程序中的`panic`进行了恢复了，这就是`panic`与`recover`的执行过程，接下来我们就仔细分析一下`runtime.gopanic`、`runtime.gorecover`这两个方法是如何实现的！
 

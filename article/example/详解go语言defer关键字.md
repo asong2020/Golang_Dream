@@ -193,7 +193,7 @@ func main() {
 
 执行如下指令：`go tool compile -N -l -S main.go`，截取部分汇编指令如下：
 
-![](./images/defer.png)
+![](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/defer.png)
 
 
 

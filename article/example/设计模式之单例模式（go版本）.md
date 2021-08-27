@@ -8,7 +8,7 @@
 
 单例模式确保某一个类只有一个实例。为什么要确保一个类只有一个实例？有什么时候才需要用到单例模式呢？听起来一个类只有一个实例好像没什么用呢！ 那我们来举个例子。比如我们的APP中有一个类用来保存运行时全局的一些状态信息，如果这个类实现不是单例的，那么App里面的组件能够随意的生成多个类用来保存自己的状态，等于大家各玩各的，那这个全局的状态信息就成了笑话了。而如果把这个类实现成单例的，那么不管App的哪个组件获取到的都是同一个对象（比如Application类，除了多进程的情况下）。
 
-<img src="../images/singleton.png" style="zoom:50%;" />
+<img src="https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/singleton.png" style="zoom:50%;" />
 
 
 
