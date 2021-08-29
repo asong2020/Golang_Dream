@@ -1,3 +1,5 @@
+`欢迎大家点击上方文字「Golang梦工厂」关注公众号，设为星标，第一时间接收推送文章。`
+
 ## 前言
 
 > 哈喽，大家好，我是`asong`。在写上一篇文章[请勿滥用goroutine](https://mp.weixin.qq.com/s/JC14dWffHub0nfPlPipsHQ)时，发现`Go`语言扩展包提供了一个带权重的信号量库[Semaphore](https://github.com/golang/sync/blob/master/semaphore/semaphore.go)，使用信号量我们可以实现一个"工作池"控制一定数量的`goroutine`并发工作。因为对源码抱有好奇的态度，所以在周末仔细看了一下这个库并进行了解析，在这里记录一下。
@@ -333,6 +335,17 @@ func callService(name string) error {
 	time.Sleep(1 * time.Second)
 	return nil
 }
+```
+
+结果如下：
+
+```go
+call  order
+call  cart
+call  account
+call  item
+call  menu
+run success
 ```
 
 
