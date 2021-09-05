@@ -32,7 +32,7 @@
 
 PV原语对信号量的操作可以分为三种情况：
 
-- 把信号量视为时某种类型的共享资源的剩余个数，实现对一类共享资源的访问
+- 把信号量视为某种类型的共享资源的剩余个数，实现对一类共享资源的访问
 - 把信号量用作进程间的同步
 - 视信号量为一个加锁标志，实现对一个共享变量的访问
 
@@ -292,7 +292,7 @@ func (s *Weighted) notifyWaiters() {
 
 ### 何时使用`Semaphore`
 
-到这里我们就把`Semaphore`的源代码看了一篇，代码行数不多，封装的也很巧妙，那么我们该什么时候选在使用它呢？
+到这里我们就把`Semaphore`的源代码看了一篇，代码行数不多，封装的也很巧妙，那么我们该什么时候选择使用它呢？
 
 目前能想到一个场景就是`Semaphore`配合上`errgroup`实现一个"工作池"，使用`Semaphore`限制`goroutine`的数量，配合上`errgroup`做并发控制，示例如下：
 
@@ -353,6 +353,8 @@ run success
 ## 总结
 
 本文我们主要赏析了`Go`官方扩展库`Semaphore`的实现，他的设计思路简单，仅仅用几十行就完成了完美的封装，值得我们借鉴学习。不过在实际业务场景中，我们使用信号量的场景并不多，大多数场景我们都可以使用`channel`来替代，但是有些场景使用`Semaphore`来实现会更好，比如上篇文章【[[警惕] 请勿滥用goroutine](https://mp.weixin.qq.com/s/JC14dWffHub0nfPlPipsHQ)】我们使用`channel+sync`来控制`goroutine`数量，这种实现方式并不好，因为实际已经起来了多个`goroutine`，只不过控制了工作的`goroutine`数量，如果改用`semaphore`实现才是真正的控制了`goroutine`数量。
+
+文中代码已上传`github`：https://github.com/asong2020/Golang_Dream/blob/master/code_demo/semaphore_demo/semaphore.go，欢迎`star`。
 
 **素质三连（分享、点赞、在看）都是笔者持续创作更多优质内容的动力！我是`asong`，我们下期见。**
 

@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f06885be-88e3-4b48-abe3-d6529e5a57f6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../reflect_demo/test.go" afterDir="false" />
+    <list default="true" id="877092b0-bf09-4203-b52f-0288904b7054" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../article/golang/并发原语之信号量Semaphore.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../article/golang/并发原语之信号量Semaphore.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../awesomeProject/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../awesomeProject/.idea/awesomeProject.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../awesomeProject/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../awesomeProject/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../awesomeProject/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../awesomeProject/go.mod" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../awesomeProject/main.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../awesomeProject1/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../awesomeProject1/.idea/awesomeProject1.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../awesomeProject1/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../awesomeProject1/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../awesomeProject1/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../awesomeProject1/.idea/workspace.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,7 +29,10 @@
   <component name="GitToolBoxStore">
     <option name="projectConfigVersion" value="2" />
   </component>
-  <component name="ProjectId" id="1vbtnwQFXeZ6K4nbVr5MmwnZowS" />
+  <component name="GoLibraries">
+    <option name="indexEntireGoPath" value="false" />
+  </component>
+  <component name="ProjectId" id="1xfP5YnkZte44Fde8aWuT5Wi9YZ" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -27,39 +43,29 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.import.settings.migrated" value="true" />
-    <property name="go.sdk.automatically.set" value="true" />
     <property name="last_opened_file_path" value="$USER_HOME$" />
-    <property name="node.js.detected.package.eslint" value="true" />
-    <property name="node.js.detected.package.tslint" value="true" />
-    <property name="node.js.path.for.package.eslint" value="project" />
-    <property name="node.js.path.for.package.tslint" value="project" />
-    <property name="node.js.selected.package.eslint" value="(autodetect)" />
-    <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
   <component name="RunManager">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
-      <module name="awesomeProject1" />
+      <module name="hystrix_demo" />
       <working_directory value="$PROJECT_DIR$/" />
       <go_parameters value="-i" />
       <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/" />
-      <package value="asong.cloud/Golang_Dream/code_demo/awesomeProject1" />
-      <directory value="$PROJECT_DIR$/" />
       <method v="2" />
     </configuration>
     <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
-      <module name="awesomeProject1" />
+      <module name="hystrix_demo" />
       <working_directory value="$PROJECT_DIR$/" />
       <go_parameters value="-i" />
       <framework value="gotest" />
       <kind value="DIRECTORY" />
-      <package value="asong.cloud/Golang_Dream/code_demo/awesomeProject1" />
-      <directory value="$PROJECT_DIR$/" />
-      <filePath value="$PROJECT_DIR$/" />
       <method v="2" />
     </configuration>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="2" />
+  </component>
+  <component name="VgoProject">
+    <integration-enabled>true</integration-enabled>
   </component>
 </project>
