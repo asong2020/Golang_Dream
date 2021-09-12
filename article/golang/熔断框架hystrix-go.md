@@ -692,7 +692,7 @@ go http.ListenAndServe(net.JoinHostPort("", "81"), hystrixStreamHandler)
 
 故事终于接近尾声了，一个熔断机制的实现确实不简单，要考虑的因素也是方方面面，尤其在微服务架构下，熔断机制是必不可少的，不仅要在框架层面实现熔断机制，还要根据具体业务场景使用熔断机制，这些都是值得我们深思熟虑的。本文介绍的熔断框架实现的还是比较完美的，这种优秀的设计思路值得我们学习。
 
-文中代码已上传`github`：https://github.com/asong2020/Golang_Dream/blob/master/code_demo/semaphore_demo/semaphore.go，欢迎`star`。
+文中代码已上传`github`：https://github.com/asong2020/Golang_Dream/tree/master/code_demo/hystrix_demo，欢迎`star`。
 
 **素质三连（分享、点赞、在看）都是笔者持续创作更多优质内容的动力！我是`asong`，我们下期见。**
 
@@ -704,7 +704,7 @@ go http.ListenAndServe(net.JoinHostPort("", "81"), hystrixStreamHandler)
 
 - [学习channel设计：从入门到放弃](https://mp.weixin.qq.com/s/E2XwSIXw1Si1EVSO1tMW7Q)
 - [详解内存对齐](https://mp.weixin.qq.com/s/ig8LDNdpflEBWlypU1NRhw)
-- [Go语言中new和make你使用哪个来分配内存？](https://mp.weixin.qq.com/s/xNdnVXxC5Ji2ApgbfpRaXQ)
+- [[警惕] 请勿滥用goroutine](https://mp.weixin.qq.com/s/JC14dWffHub0nfPlPipsHQ)
 - [源码剖析panic与recover，看不懂你打我好了！](https://mp.weixin.qq.com/s/yJ05a6pNxr_G72eiWTJ-rw)
 - [面试官：小松子来聊一聊内存逃逸](https://mp.weixin.qq.com/s/MepbrrSlGVhNrEkTQhfhhQ)
 - [面试官：你能聊聊string和[]byte的转换吗？](https://mp.weixin.qq.com/s/jztwFH6thFdcySzowXOH_Q)
