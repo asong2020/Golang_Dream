@@ -9,7 +9,7 @@ import (
 
 const (
 	VERSION = "2.6.0"
-	ADDR = "127.0.0.1:2181"
+	ADDR = "localhost:9092"
 	Group = "asong"
 )
 

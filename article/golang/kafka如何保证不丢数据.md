@@ -1,6 +1,6 @@
 ## 背景
 
-目前一些互联网公司会使用消息队列来做核心业务，因为是核心业务，所以对数据的最后一致性比较敏感，如果中间出现数据丢失，最终就会引来用户的投诉，年底绩效就变成325了。之前和几个朋友聊天，他们的公司都在用`kafka`来做消息队列，使用`kafka`到底会不会丢消息呢？如果丢消息了该怎么做好补偿措施呢？ 本文我们就一起来分析一下，并使用`Go`操作`Kafka`进行辅助分析。
+目前一些互联网公司会使用消息队列来做核心业务，因为是核心业务，所以对数据的最后一致性比较敏感，如果中间出现数据丢失，就会引来用户的投诉，年底绩效就变成325了。之前和几个朋友聊天，他们的公司都在用`kafka`来做消息队列，使用`kafka`到底会不会丢消息呢？如果丢消息了该怎么做好补偿措施呢？ 本文我们就一起来分析一下，并介绍如何使用`Go`操作`Kafka`可以不丢失数据。
 
 本文操作`kafka`基于：https://github.com/Shopify/sarama
 
@@ -79,7 +79,7 @@ push消息时会把数据追加到Partition并且分配一个偏移量，这个�
 
 所以自动提交会带来数据丢失的问题，手动提交会带来数据重复的问题，分析如下：
 
-- 在设置自动提交的时候，当我们拉取到一个消息后，此是offset已经提交了，但是我们在处理消费逻辑的时候失败了，这就会导致数据丢失了
+- 在设置自动提交的时候，当我们拉取到一个消息后，此时offset已经提交了，但是我们在处理消费逻辑的时候失败了，这就会导致数据丢失了
 - 在设置手动提交时，如果我们是在处理完消息后提交commit，那么在commit这一步发生了失败，就会导致重复消费的问题。
 
 比起数据丢失，重复消费是符合业务预期的，我们可以通过一些幂等性设计来规避这个问题。
@@ -88,4 +88,136 @@ push消息时会把数据追加到Partition并且分配一个偏移量，这个�
 
 ## 实战
 
-完整代码已经上传github：
+完整代码已经上传github：https://github.com/asong2020/Golang_Dream/tree/master/code_demo/kafka_demo
+
+### 解决push消息丢失问题
+
+主要是通过两点来解决：
+
+- 通过设置`RequiredAcks`模式来解决，选用`WaitForAll`可以保证数据推送成功，不过会影响时延时
+- 引入重试机制，设置重试次数和重试间隔
+
+因此我们写出如下代码（摘出创建client部分）：
+
+```go
+func NewAsyncProducer() sarama.AsyncProducer {
+	cfg := sarama.NewConfig()
+	version, err := sarama.ParseKafkaVersion(VERSION)
+	if err != nil{
+		log.Fatal("NewAsyncProducer Parse kafka version failed", err.Error())
+		return nil
+	}
+	cfg.Version = version
+	cfg.Producer.RequiredAcks = sarama.WaitForAll // 三种模式任君选择
+	cfg.Producer.Partitioner = sarama.NewHashPartitioner
+	cfg.Producer.Return.Successes = true
+	cfg.Producer.Return.Errors = true
+	cfg.Producer.Retry.Max = 3 // 设置重试3次
+	cfg.Producer.Retry.Backoff = 100 * time.Millisecond
+	cli, err := sarama.NewAsyncProducer([]string{ADDR}, cfg)
+	if err != nil{
+		log.Fatal("NewAsyncProducer failed", err.Error())
+		return nil
+	}
+	return cli
+}
+```
+
+
+
+### 解决pull消息丢失问题
+
+这个解决办法就比较粗暴了，直接使用自动提交的模式，在每次真正消费完之后在自己手动提交offset，但是会产生重复消费的问题，不过很好解决，使用幂等性操作即可解决。
+
+代码示例：
+
+```go
+func NewConsumerGroup(group string) sarama.ConsumerGroup {
+	cfg := sarama.NewConfig()
+	version, err := sarama.ParseKafkaVersion(VERSION)
+	if err != nil{
+		log.Fatal("NewConsumerGroup Parse kafka version failed", err.Error())
+		return nil
+	}
+
+	cfg.Version = version
+	cfg.Consumer.Group.Rebalance.Strategy = sarama.BalanceStrategyRange
+	cfg.Consumer.Offsets.Initial = sarama.OffsetOldest
+	cfg.Consumer.Offsets.Retry.Max = 3
+	cfg.Consumer.Offsets.AutoCommit.Enable = true // 开启自动提交，需要手动调用MarkMessage才有效
+	cfg.Consumer.Offsets.AutoCommit.Interval = 1 * time.Second // 间隔
+	client, err := sarama.NewConsumerGroup([]string{ADDR}, group, cfg)
+	if err != nil {
+		log.Fatal("NewConsumerGroup failed", err.Error())
+	}
+	return client
+}
+```
+
+上面主要是创建ConsumerGroup部分，细心的读者应该看到了，我们这里使用的是自动提交，说好的使用手动提交呢？这是因为我们这个kafka库的特性不同，这个自动提交需要与MarkMessage()方法配合使用才会提交(有疑问的朋友可以实践一下，或者看一下源码)，否则也会提交失败，因为我们在写消费逻辑时要这样写：
+
+```go
+func (e EventHandler) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
+	for msg := range claim.Messages() {
+		var data common.KafkaMsg
+		if err := json.Unmarshal(msg.Value, &data); err != nil {
+			return errors.New("failed to unmarshal message err is " + err.Error())
+		}
+		// 操作数据，改用打印
+		log.Print("consumerClaim data is ")
+
+		// 处理消息成功后标记为处理, 然后会自动提交
+		session.MarkMessage(msg,"")
+	}
+	return nil
+}
+```
+
+或者直接使用手动提交方法来解决，只需两步：
+
+第一步：关闭自动提交：
+
+```go
+consumerConfig.Consumer.Offsets.AutoCommit.Enable = false  // 禁用自动提交，改为手动
+```
+
+第二步：消费逻辑中添加如下代码，手动提交模式下，也需要先进行标记，在进行commit
+
+```go
+session.MarkMessage(msg,"")
+session.Commit()
+```
+
+
+
+**完整代码可以到github上下载并进行验证！**
+
+
+
+## 总结
+
+本文我们主要说明了两个知识点：
+
+- Kafka会产生消息丢失
+- 使用Go操作Kafka如何配置可以不丢失数据
+
+日常业务开发中，很多公司都喜欢拿消息队列进行解耦，那么你就要注意了，使用Kafka做消息队列无法保证数据不丢失，需要我们自己手动配置补偿，别忘记了，要不又是一场P0事故。
+
+**素质三连（分享、点赞、在看）都是笔者持续创作更多优质内容的动力！我是`asong`，我们下期见。**
+
+**创建了一个Golang学习交流群，欢迎各位大佬们踊跃入群，我们一起学习交流。入群方式：关注公众号获取。更多学习资料请到公众号领取。**
+
+![](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/%E6%89%AB%E7%A0%81_%E6%90%9C%E7%B4%A2%E8%81%94%E5%90%88%E4%BC%A0%E6%92%AD%E6%A0%B7%E5%BC%8F-%E7%99%BD%E8%89%B2%E7%89%88-20210717170231906-20210801174715998.png)
+
+推荐往期文章：
+
+- [学习channel设计：从入门到放弃](https://mp.weixin.qq.com/s/E2XwSIXw1Si1EVSO1tMW7Q)
+- [详解内存对齐](https://mp.weixin.qq.com/s/ig8LDNdpflEBWlypU1NRhw)
+- [[警惕\] 请勿滥用goroutine](https://mp.weixin.qq.com/s/JC14dWffHub0nfPlPipsHQ)
+- [源码剖析panic与recover，看不懂你打我好了！](https://mp.weixin.qq.com/s/yJ05a6pNxr_G72eiWTJ-rw)
+- [面试官：小松子来聊一聊内存逃逸](https://mp.weixin.qq.com/s/MepbrrSlGVhNrEkTQhfhhQ)
+- [面试官：两个nil比较结果是什么？](https://mp.weixin.qq.com/s/CNOLLLRzHomjBnbZMnw0Gg)
+- [并发编程包之 errgroup](https://mp.weixin.qq.com/s/NcrENqRyK9dYrOBBI0SGkA)
+
+
+
