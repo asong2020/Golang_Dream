@@ -29,7 +29,7 @@ func (e EventHandler) ConsumeClaim(session sarama.ConsumerGroupSession, claim sa
 			return errors.New("failed to unmarshal message err is " + err.Error())
 		}
 		// 操作数据，改用打印
-		log.Print("consumerClaim data is ")
+		log.Print("consumerClaim data is ",data)
 
 		// 处理消息成功后标记为处理, 然后会自动提交
 		session.MarkMessage(msg,"")
