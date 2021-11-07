@@ -1,6 +1,6 @@
 ## 前言
 
-哈喽，大家好，我是`asong`。今天想与大家再一次分享`context`包，经过一年的沉淀，重新出发，基于Go`1.17.1`从源码角度再次分析，不过这次不同的是，我打算先从入门开始，因为大多数初学的读者都想先知道怎么用，然后才会关心源码是如何实现的。
+哈喽，大家好，我是`asong`。今天想与大家分享`context`包，经过一年的沉淀，重新出发，基于Go`1.17.1`从源码角度再次分析，不过这次不同的是，我打算先从入门开始，因为大多数初学的读者都想先知道怎么用，然后才会关心源码是如何实现的。
 
 相信大家在日常工作开发中一定会看到这样的代码：
 
@@ -278,7 +278,7 @@ balabalabalabala
 
 
 
-### 自定义Context
+### 自定义`Context`
 
 因为`Context`本质是一个接口，所以我们可以通过实现`Context`达到自定义`Context`的目的，一般在实现`Web`框架或`RPC`框架往往采用这种形式，比如`gin`框架的`Context`就是自己有封装了一层，具体代码和实现就贴在这里，有兴趣可以看一下`gin.Context`是如何实现的。
 
@@ -693,15 +693,10 @@ func (c *timerCtx) cancel(removeFromParent bool, err error) {
 ### 参考文章
 
 https://pkg.go.dev/context@go1.7beta1#Background
-
 https://studygolang.com/articles/21531
-
 https://draveness.me/golang/docs/part3-runtime/ch06-concurrency/golang-context/
-
 https://www.cnblogs.com/qcrao-2018/p/11007503.html
-
 https://segmentfault.com/a/1190000039294140
-
 https://www.flysnow.org/2017/05/12/go-in-action-go-context.html
 
 
@@ -709,6 +704,8 @@ https://www.flysnow.org/2017/05/12/go-in-action-go-context.html
 ## 总结
 
 `context`虽然在使用上丑陋了一点，但是他却能解决很多问题，日常业务开发中离不开`context`的使用，不过也别使用错了`context`，其取消也采用的`channel`通知，所以代码中还有要有监听代码来监听取消信号，这点也是经常被广大初学者容易忽视的一个点。
+
+文中示例已上传`github`：https://github.com/asong2020/Golang_Dream/tree/master/code_demo/context_example
 
 **好啦，本文到这里就结束了，我是`asong`，我们下期见。**
 
