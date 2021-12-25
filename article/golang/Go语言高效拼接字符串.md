@@ -65,7 +65,7 @@ s += "asong"
 s += "真帅"
 ```
 
-这种方式使用起来最简单，基本所有语言都提有提供这种方式，使用`+`操作符进行拼接时，会对字符串进行遍历，计算并开辟一个新的空间来存储原来的两个字符串。
+这种方式使用起来最简单，基本所有语言都有提供这种方式，使用`+`操作符进行拼接时，会对字符串进行遍历，计算并开辟一个新的空间来存储原来的两个字符串。
 
 
 
@@ -154,7 +154,7 @@ func (b *Buffer) WriteString(s string) (n int, err error) {
 }
 ```
 
-切片在创建是并不会申请内存块，只有在往里写数据时才会申请，首次申请的大小即为写入数据的大小。如果写入的数据小于64字节，则按64字节申请。采用动态扩展`slice`的机制，字符串追加采用`copy`的方式将追加的部分拷贝到尾部，`copy`是内置的拷贝函数，可以减少内存分配。
+切片在创建时并不会申请内存块，只有在往里写数据时才会申请，首次申请的大小即为写入数据的大小。如果写入的数据小于64字节，则按64字节申请。采用动态扩展`slice`的机制，字符串追加采用`copy`的方式将追加的部分拷贝到尾部，`copy`是内置的拷贝函数，可以减少内存分配。
 
 但是在将`[]byte`转换为`string`类型依旧使用了标准类型，所以会发生内存分配：
 
@@ -226,14 +226,14 @@ string(base)
 
 ## Benchmark对比
 
-上面我们总共提供了6种方法，原理我们耶基本知道了，那么我们就使用`Go`语言中的`Benchmark`来分析一下到底哪种字符串拼接方式更高效。我们主要分两种情况进行分析：
+上面我们总共提供了6种方法，原理我们基本知道了，那么我们就使用`Go`语言中的`Benchmark`来分析一下到底哪种字符串拼接方式更高效。我们主要分两种情况进行分析：
 
 - 少量字符串拼接
 - 大量字符串拼接
 
-因为代码量有点多，下面只贴出分析结果，详细代码已经上传`github`：【待添加】
+因为代码量有点多，下面只贴出分析结果，详细代码已经上传`github`：https://github.com/asong2020/Golang_Dream/tree/master/code_demo/string_join
 
-我们点定义一个基础字符串：
+我们先定义一个基础字符串：
 
 ```go
 var base  = "123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASFGHJKLZXCVBNM"
@@ -297,7 +297,7 @@ ok      asong.cloud/Golang_Dream/code_demo/string_join/muliti   10.699s
 
 综合对比性能排序：
 
-strings.join ≈ strings.builder > bytes.buffer > []byte转换string > "+" > fmt.sprintf
+`strings.join` ≈ `strings.builder` > `bytes.buffer` > `[]byte`转换`string` > "+" > `fmt.sprintf`
 
 
 
@@ -305,7 +305,7 @@ strings.join ≈ strings.builder > bytes.buffer > []byte转换string > "+" > fmt
 
 本文我们针对`6`种字符串的拼接方式进行介绍，并通过`benckmark`对比了效率，无论什么时候使用`strings.builder`都不会错，但是在少量字符串拼接时，直接`+`也就是更优的方式，具体业务场景具体分析，不要一概而论。
 
-文中代码已上传`github`：
+文中代码已上传`github`：https://github.com/asong2020/Golang_Dream/tree/master/code_demo/string_join
 
 **好啦，本文到这里就结束了，我是`asong`，我们下期见。**
 

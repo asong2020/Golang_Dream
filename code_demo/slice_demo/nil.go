@@ -5,5 +5,7 @@ import (
 )
 
 func main()  {
-	fmt.Println(&(func() {}))
+	x, y := make([]byte, 9000), make([]byte, 9)
+	fmt.Println(x)
+	fmt.Println(y)
 }
