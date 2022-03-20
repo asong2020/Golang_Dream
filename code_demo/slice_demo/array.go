@@ -1,11 +1,16 @@
 package main
 
-import (
-	"fmt"
-)
-
 func main()  {
-	var buf [5]byte
-	buf[0]= 1
-	fmt.Println(buf)
+	param1 := make([]int, 100)
+	param2 := make([]int, 100000000)
+	smallSlice(param1)
+	largeSlice(param2)
+}
+
+func smallSlice(params []int)  {
+	// ....
+}
+
+func largeSlice(params []int)  {
+	// ....
 }

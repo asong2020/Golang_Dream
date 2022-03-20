@@ -35,8 +35,41 @@ func main()  {
 }
 ```
 
-程序正常运行，没有任何问题，接下来我们就来看一下为什么`context`是线程安全的！！！
+程序正常运行，没有任何问题。
+但是`context`对携带的数据没有类型限制，所以任何数据类型都是用`context`携带，在携带的数据类型是指针类型时，就不是线程安全的，来看一个例子：
 
+```go
+func main()  {
+	m := make(map[string]string)
+	m ["asong"] = "Golang梦工厂"
+	ctx := context.WithValue(context.Background(), "asong", m)
+	go func() {
+		for {
+			m1 := ctx.Value("asong")
+			mm := m1.(map[string]string)
+			mm["asong"] = "123213"
+		}
+	}()
+	go func() {
+		for {
+			m1 := ctx.Value("asong")
+			mm := m1.(map[string]string)
+			mm["asong"] = "123213"
+		}
+	}()
+	time.Sleep(10 * time.Second)
+}
+```
+
+运行结果：
+
+```go
+fatal error: concurrent map writes
+
+goroutine 18 [running]:
+runtime.throw({0x1072af2, 0x0})
+......
+```
 
 
 ## 为什么线程安全？
@@ -82,7 +115,7 @@ type valueCtx struct {
 
 ![image-20220207214507921](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/image-20220207214507921.png)
 
-总结：`context`添加的键值对一个链式的，会不断衍生新的`context`，所以`context`本身是不可变的，因此是线程安全的。
+总结：`context`添加的键值对一个链式的，会不断衍生新的`context`，所以`context`本身是不可变的，因此是线程安全的，但是如果我们携带的数据是指针类型，这时依然有线程不安全的风险。
 
 
 

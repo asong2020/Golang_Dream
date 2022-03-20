@@ -2,30 +2,25 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"time"
 )
 
 func main()  {
-	ctx := context.WithValue(context.Background(), "asong", "test01")
+	m := make(map[string]string)
+	m ["asong"] = "Golang梦工厂"
+	ctx := context.WithValue(context.Background(), "asong", m)
 	go func() {
 		for {
-			_ = context.WithValue(ctx, "asong", "test02")
+			m1 := ctx.Value("asong")
+			mm := m1.(map[string]string)
+			mm["asong"] = "123213"
 		}
 	}()
 	go func() {
 		for {
-			_ = context.WithValue(ctx, "asong", "test03")
-		}
-	}()
-	go func() {
-		for {
-			fmt.Println(ctx.Value("asong"))
-		}
-	}()
-	go func() {
-		for {
-			fmt.Println(ctx.Value("asong"))
+			m1 := ctx.Value("asong")
+			mm := m1.(map[string]string)
+			mm["asong"] = "123213"
 		}
 	}()
 	time.Sleep(10 * time.Second)
