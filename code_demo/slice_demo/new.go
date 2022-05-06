@@ -49,7 +49,7 @@ func res() error {
 //	slice := new([]int64)
 //	fmt.Printf("slice: %p %#v \n", &slice, slice) // slice: 0xc0000ae028 &[]int64(nil)
 //	(*slice)[0] = 1
-//	fmt.Printf("slice: %p %#v \n", &slice, slice) // panic: runtime error: index out of range [0] with length 0
+//	fmt.Printf("slice: %p %#v \n", &slice, slice) // panic: runtime error: index out of safe [0] with length 0
 //
 //	// map
 //	map1 := new(map[string]string)
