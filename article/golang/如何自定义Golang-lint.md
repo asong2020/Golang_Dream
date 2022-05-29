@@ -285,4 +285,12 @@ func NewfirstparamcontextCheck() *goanalysis.Linter {
 
 ## 总结
 
-`golang-cli`仓库中`pkg/golinters`目录下存放了很多静态检查代码，学会一个知识点的最快办法就是抄代码，先学会怎么使用的，慢慢在把它变成我们自己的；本文没有对`AST`标准库做过多的介绍，因为这部分文字描述比较难以理解，最好的办法还是自己去看官方文档、加上实践才能更快的理解；
+`golang-cli`仓库中`pkg/golinters`目录下存放了很多静态检查代码，学会一个知识点的最快办法就是抄代码，先学会怎么使用的，慢慢在把它变成我们自己的；本文没有对`AST`标准库做过多的介绍，因为这部分文字描述比较难以理解，最好的办法还是自己去看官方文档、加上实践才能更快的理解。
+
+本文所有代码已经上传：https://github.com/asong2020/Golang_Dream/tree/master/code_demo/custom_linter
+
+好啦，本文到这里就结束了，我是**asong**，我们下期见。
+
+**创建了读者交流群，欢迎各位大佬们踊跃入群，一起学习交流。入群方式：关注公众号获取。更多学习资料请到公众号领取。**
+
+![](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/扫码_搜索联合传播样式-白色版.png)
