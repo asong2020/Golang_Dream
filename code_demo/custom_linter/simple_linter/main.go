@@ -12,7 +12,7 @@ import (
 func main() {
 	v := visitor{fset: token.NewFileSet()}
 	for _, filePath := range os.Args[1:] {
-		if filePath == "-" { // to be able to run this like "go run main.go -- input.go"
+		if filePath == "-" { // to be able to run this like "go run reader.go -- input.go"
 			continue
 		}
 
