@@ -1,22 +1,18 @@
 # github.com/gin-contrib/sse v0.1.0
 github.com/gin-contrib/sse
-# github.com/gin-gonic/gin v1.6.3
+# github.com/gin-gonic/gin v1.7.0
 ## explicit
 github.com/gin-gonic/gin
 github.com/gin-gonic/gin/binding
 github.com/gin-gonic/gin/internal/bytesconv
 github.com/gin-gonic/gin/internal/json
 github.com/gin-gonic/gin/render
-# github.com/go-playground/assert/v2 v2.0.1
-## explicit
-github.com/go-playground/assert/v2
 # github.com/go-playground/locales v0.13.0
 github.com/go-playground/locales
 github.com/go-playground/locales/currency
 # github.com/go-playground/universal-translator v0.17.0
 github.com/go-playground/universal-translator
-# github.com/go-playground/validator/v10 v10.3.0
-## explicit
+# github.com/go-playground/validator/v10 v10.4.1
 github.com/go-playground/validator/v10
 # github.com/golang/protobuf v1.4.2
 ## explicit
@@ -53,8 +49,11 @@ github.com/olivere/elastic/v7/uritemplates
 github.com/pkg/errors
 # github.com/ugorji/go/codec v1.1.7
 github.com/ugorji/go/codec
+# golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
+golang.org/x/crypto/sha3
 # golang.org/x/sys v0.0.0-20200909081042-eff7692f9009
 ## explicit
+golang.org/x/sys/cpu
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
 # google.golang.org/protobuf v1.25.0
