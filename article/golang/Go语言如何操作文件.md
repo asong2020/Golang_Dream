@@ -6,7 +6,9 @@
 
 **Go语言版本：1.18**
 
-本文所有代码已经上传`github`：
+本文所有代码已经上传`github`：https://github.com/asong2020/Golang_Dream/tree/master/code_demo/file_operate_demo
+
+
 
 ## 操作文件包括哪些
 
@@ -27,7 +29,7 @@
 
 所以本文就针对这些操作总结了一些示例方法供大家参考；
 
-《插入图片》
+![](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/%E6%88%AA%E5%B1%8F2022-07-10%20%E4%B8%8B%E5%8D%887.18.55.png)
 
 
 
@@ -553,3 +555,11 @@ func writerZip()  {
 
 本文归根结底是介绍`os`、`io`、`bufio`这些包如何操作文件，因为`Go`语言操作提供了太多了方法，借着本文全都介绍出来，在使用的时候可以很方便的当作文档查询，如果你问用什么方法操作文件是最优的方法，这个我也没法回答你，需要根据具体场景分析的，如果这些方法你都知道了，在写一个benchmark对比一下就可以了，实践才是检验真理的唯一标准。
 
+本文所有代码已经上传`github`：https://github.com/asong2020/Golang_Dream/tree/master/code_demo/file_operate_demo
+
+好啦，本文到这里就结束了，我是**asong**，我们下期见。
+
+**创建了读者交流群，欢迎各位大佬们踊跃入群，一起学习交流。入群方式：关注公众号获取。更多学习资料请到公众号领取。**
+
+
+![](https://song-oss.oss-cn-beijing.aliyuncs.com/golang_dream/article/static/扫码_搜索联合传播样式-白色版.png)
