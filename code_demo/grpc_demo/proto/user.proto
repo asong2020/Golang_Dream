@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "proto/user.proto;user_proto";
+
+
+//the request message containing the user's name password
+message LoginRequest {
+  //user name
+  string username = 1;
+  //password
+  string password = 2;
+}
+//the response message containing the user's information
+message LoginResponse {
+  //user name
+  string username = 1;
+  string nickname = 2;
+
+  //token
+  string token = 3;
+  //result code
+  uint32 code = 4;
+  //result msg
+  string msg = 5;
+}
+
+
+service UserService {
+    rpc login (LoginRequest) returns (LoginResponse){
+
+  }
+
+}

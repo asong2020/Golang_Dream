@@ -1,0 +1,90 @@
+definitions:
+  request.ChangePassword:
+    properties:
+      newPassword:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  request.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  request.RegisterRequest:
+    properties:
+      nickname:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+  license: {}
+paths:
+  /base/login:
+    post:
+      parameters:
+      - description: 用户登录接口
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data": { "user": { "username": "asong", "nickname": "", "avatar": "" }, "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6ImFzb25nIiwiZXhwIjoxNTk2OTAyMzEyLCJpc3MiOiJhc29uZyIsIm5iZiI6MTU5Njg5NDExMn0.uUS1TreZusX-hL3nKOSNYZIeZ_0BGrxWjKI6xdpdO40", "expiresAt": 1596902312000 },,"msg":"操作成功"}'
+          schema:
+            type: string
+      summary: 用户登录
+      tags:
+      - Base
+  /base/register:
+    post:
+      parameters:
+      - description: 用户注册接口
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"注册成功"}'
+          schema:
+            type: string
+      summary: 用户注册账号
+      tags:
+      - Base
+  /user/setPassword:
+    put:
+      parameters:
+      - description: 用户修改密码
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.ChangePassword'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"修改成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用户修改密码
+      tags:
+      - User
+swagger: "2.0"

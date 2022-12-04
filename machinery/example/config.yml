@@ -1,0 +1,17 @@
+broker: redis://localhost:6379
+
+default_queue: "asong"
+
+result_backend: redis://localhost:6379
+
+redis:
+  max_idle: 3
+  max_active: 3
+  max_idle_timeout: 240
+  wait: true
+  read_timeout: 15
+  write_timeout: 15
+  connect_timeout: 15
+  normal_tasks_poll_period: 1000
+  delayed_tasks_poll_period: 500
+  delayed_tasks_key: "asong"

@@ -1,0 +1,42 @@
+{{template "base/base.html" .}}
+{{define "head"}}
+<title>{{i18n .Lang "please"}} - {{i18n .Lang "app_intro"}}</title>
+{{end}}
+{{define "body"}}
+<div class="container" style="width: 500px;">
+    <h3>{{i18n .Lang "set_register"}}</h3>
+    <br>
+    <form action="/register/join" method="post" class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-3 control-label">{{i18n .Lang "username"}}: </label>
+            <div class="col-md-5">
+                  <input type="text" class="form-control" name="name" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-3 control-label">{{i18n .Lang "telephone"}}: </label>
+            <div class="col-md-5">
+                <input type="text" class="form-control"  name="tel" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-3 control-label">{{i18n .Lang "password"}}: </label>
+            <div class="col-md-5">
+                  <input type="text" class="form-control" name="password" required>
+            </div>
+        </div>		
+        <div class="form-group">
+            <label class="col-md-3 control-label">{{i18n .Lang "email"}}: </label>
+            <div class="col-md-5">
+                  <input type="text" class="form-control" name="email" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-10">
+                <button type="submit" class="btn btn-info">{{i18n .Lang "enter_register"}}</button>
+            </div>
+        </div>
+    </form>
+</div>
+{{end}}

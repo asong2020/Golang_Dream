@@ -1,0 +1,438 @@
+## 前言
+
+哈喽，大家好，我是asong，这是我的第八篇原创文章。听说你们还不会jwt、swagger，所以我带来一个入门级别的小项目。实现用户登陆、修改密码的操作。使用GIN（后台回复`Golang梦工厂`：gin，可获取2020GIN中文文档）作为web框架，使用jwt进行身份校验，使用swagger生成接口文档。代码已上传个人github：https://github.com/asong2020/Golang_Dream/tree/master/Gin/gin_jwt_swagger。有需要的自行下载，配有详细使用文档。
+
+
+
+## 1. jwt
+
+### 1.1 简介
+
+jwt全称 Json web token，是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准。JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源，也可以增加一些额外的其他业务逻辑所必须的声明信息，该token也可直接被用于认证，也可以被加密。学习jwt，我们可以从官网文档入手，jwt官网[传送门](https://jwt.io/)。
+
+
+
+### 1.2 json web 令牌结构
+
+JSON Web令牌由三部分组成，这些部分由`.`分隔，分别是
+
+- Header
+- Payload
+- Signature
+
+一个JWT表示如示例：`xxxxx.yyyyy.zzzzz`
+
+#### 1.2.1 Header
+
+Header通常由两部分组成：令牌的类型和所使用的签名算法，例如HMAC、SHA256或者RSA。
+
+```json
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+```
+
+此json是由Base64Url编码形成JWT的第一部分。
+
+
+
+#### 1.2.2 Payload
+
+令牌的第二部分是有效载荷。用于声明，通常存储一些用户ID之类的索引数据，也可以放一些其他有用的信息，注意：不要存储机密数据。JWT标准定义了一些基本字段：
+
+- `iss`：该JWT的签发者
+- `sub`：该JWT所面向的用户
+- `aud`：接收该JWT的一方
+- `exp`（expires）：过期时间
+- `iat`：签发时间
+
+除了定义这几个标准字段外，我们可以定义一些我们在业务处理中需要用到的字段，可以有用户的id、名字等。来个例子看一看吧：
+
+```json
+{
+    "iss": "asong",
+    "iat": 6666666666,
+    "exp": 6666666666,
+    "aud": "user",
+    "sub": "all",
+    "user_id": "6666666666666666666",
+    "username": "asong"
+}
+```
+
+上面的user_id、username都是我们定义的字段。对此负载进行Base64Url编码，形成JSON Web令牌的第二部分。
+
+
+
+#### 1.2.3  Signature
+
+签名其实是对JWT的Header和Payload整合的一个签名验证。我们需要将Header和Payload链接起来，然后使用一个key用HMAC SHA256进行加密，创建一个签名，像下面这样。
+
+```json
+HMACSHA256(
+  base64UrlEncode(header) + "." +
+  base64UrlEncode(payload),
+  secret)
+```
+
+签名的作用用于验证消息在此过程中没有更改，并且对于使用私钥进行签名的令牌，它还可以验证JWT的发件人是谁。
+
+最终将这三部分放在一起，由`.`进行分隔，示例如下：
+
+![](./images/example_jwt.png)
+
+### 1.3  什么时候使用JWT
+
+- Authorization(授权)：用户请求的token中包含了该令牌允许的路由，服务和资源。单点登录就是其中广泛使用JWT的一个特性。
+- Information Exchange(信息交换)：对于安全的在各方之间传输信息而言，JSON Web Tokens无疑是一种很好的方式。因为JWTs可以被签名，例如，用公钥/私钥对，可以确定发送人身份。并且·签名是使用头和有效负载计算的，还可以验证内容有没有被篡改。
+
+JWT工作可以用如下图表示：
+
+![](./images/token_worker.png)
+
+根据上图所示，我们可以看到整个过程分为两个阶段，第一个阶段，客户端向服务器获取token，第二阶段，客户端带着该token去请求相关的资源。服务端通常根据指定的规则进行token的生成。在认证的时候，当用户用他们的凭证成功登录以后，一个JSON WebToken将会被返回。这是这个token就是用户凭证了，我们必须小心防止出现安全问题。一般我们保存令牌的时候不应该超过你所需要他的时间。无论何时用户想要访问受保护的路由或者资源的时候，用户代理（通常是浏览器）都应该带上JWT，典型的，通常放在Authorization header中，用Bearer schema: `Authorization: Bearer <token>`。服务器上的受保护的路由将会检查Authorization header中的JWT是否有效，如果有效，则用户可以访问受保护的资源。如果JWT包含足够多的必需的数据，那么就可以减少对某些操作的数据库查询的需要，尽管可能并不总是如此。如果token是在授权头（Authorization header）中发送的，那么跨源资源共享(CORS)将不会成为问题，因为它不使用cookie.
+
+![](./images/auth.png)
+
+- 客户端向授权接口请求授权
+- 服务端授权后返回一个access token给客户端
+- 客户端使用access token访问受保护的资源
+
+
+
+好啦，JWT的基本原理介绍完毕，你学了嘛？没学会不要紧，我们还有代码呢。
+
+### 1.3	 代码实践
+
+- Web框架：Gin
+- 第三方库：github.com/dgrijalva/jwt-go
+
+代码地址：https://github.com/asong2020/Golang_Dream/tree/master/Gin/gin_jwt_swagger
+
+在这再推荐一个别人写好的JWT包，直接使用也可以：https://github.com/appleboy/gin-jwt
+
+#### 1.3.1	定义相关参数
+
+- 定义claims中信息，示例定义如下：
+
+```go
+type UserClaims struct {
+	Username string
+	jwt.StandardClaims
+}
+```
+
+- 定义secret
+
+```yaml
+jwt:
+  signkey: 'asong'
+```
+
+- 定义过期时间
+
+```yaml
+redis:
+  addr: 127.0.0.1:6379
+  db: 1
+  password: ''
+  poolsize: 100
+  cache:
+    tokenexpired: 7200 # expired time 2*60*60
+```
+
+- 创建一个JWT对象
+
+```go
+type JWT struct {
+	SigningKey []byte
+}
+
+func NewJWT() *JWT {
+	return &JWT{
+		[]byte(global.AsongServer.Jwt.Signkey),
+	}
+}
+```
+
+#### 1.3.2	生成JWT
+
+```go
+func (j *JWT)GenerateToken(claims request.UserClaims)  (string,error){
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256,claims)
+	return token.SignedString(j.SigningKey)
+}
+```
+
+
+
+#### 1.3.3 解析Token
+
+```go
+func (j *JWT)ParseToken(t string) (*request.UserClaims,error) {
+	token, err := jwt.ParseWithClaims(t,&request.UserClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return j.SigningKey,nil
+	})
+	if err != nil{
+		if v, ok := err.(*jwt.ValidationError); ok {
+			if v.Errors&jwt.ValidationErrorMalformed != 0 {
+				return nil, errors.New("That's not even a token")
+			} else if v.Errors&jwt.ValidationErrorExpired != 0 {
+				// Token is expired
+				return nil, errors.New("Token is expired")
+			} else if v.Errors&jwt.ValidationErrorNotValidYet != 0 {
+				return nil, errors.New("Token not active yet")
+			} else {
+				return nil, errors.New("Couldn't handle this token:")
+			}
+		}
+	}
+	if token != nil {
+		if claims, ok := token.Claims.(*request.UserClaims); ok && token.Valid {
+			return claims, nil
+		}
+		return nil, errors.New("Couldn't handle this token:")
+
+	} else {
+		return nil, errors.New("Couldn't handle this token:")
+
+	}
+}
+```
+
+
+
+#### 1.3.4 更新Token
+
+```go
+func (j *JWT) RefreshToken(t string) (string, error) {
+	jwt.TimeFunc = func() time.Time {
+		return time.Unix(0, 0)
+	}
+	token, err := jwt.ParseWithClaims(t, &request.UserClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return j.SigningKey, nil
+	})
+	if err != nil {
+		return "", err
+	}
+	if claims, ok := token.Claims.(*request.UserClaims); ok && token.Valid {
+		jwt.TimeFunc = time.Now
+		claims.StandardClaims.ExpiresAt = time.Now().Add(1 * time.Hour).Unix()
+		return j.GenerateToken(*claims)
+	}
+	return "", errors.New("Couldn't handle this token:")
+}
+```
+
+
+
+#### 1.3.5 编写中间件
+
+```go
+func Auth()  gin.HandlerFunc{
+	return func(c *gin.Context) {
+		token := c.Request.Header.Get("token")
+		if token == ""{
+			response.Result(response.ERROR,gin.H{
+				"reload": true,
+			},"非法访问",c)
+			c.Abort()
+			return
+		}
+		j := NewJWT()
+		claims, err := j.ParseToken(token)
+		if err != nil{
+			response.Result(response.ERROR, gin.H{
+				"reload": true,
+			}, err.Error(), c)
+			c.Abort()
+			return
+		}
+		c.Set("claims",claims)
+		c.Next()
+	}
+}
+```
+
+
+
+#### 1.3.6 在gin框架中使用
+
+- 路由注册时，使用中间，作为用户登录验证
+
+```go
+func RouteUserInit(Router *gin.RouterGroup)  {
+	UserRouter := Router.Group("user").Use(middleware.Auth())
+	{
+		UserRouter.PUT("setPassword",setPassword)
+	}
+}
+```
+
+
+
+- 用户通过接口获取Token之后，后续就会携带着Token再来请求我们的其他接口，这个时候就需要对这些请求的Token进行校验操作了
+
+```go
+func login(c *gin.Context)  {
+	 var req request.LoginRequest
+	 _ = c.ShouldBindJSON(&req)
+	 if req.Username == "" || req.Password == ""{
+		 response.FailWithMessage("参数错误",c)
+		 return
+	 }
+	 user := &model.User{
+	 	Username: req.Username,
+	 	Password: req.Password,
+	 }
+	 u ,err := service.Login(user)
+	 if err != nil{
+		 response.FailWithMessage(err.Error(),c)
+		 return
+	 }
+	 service.GenerateTokenForUser(c,u)
+}
+//生成token
+func GenerateTokenForUser(c *gin.Context,u *model.User)  {
+	j := &middleware.JWT{
+		SigningKey: []byte(global.AsongServer.Jwt.Signkey), // 唯一签名
+	}
+	claims := request.UserClaims{
+		Username: u.Username,
+		StandardClaims: jwt.StandardClaims{
+			NotBefore: time.Now().Unix() - 1000,       // 签名生效时间
+			ExpiresAt: time.Now().Unix() + 60*60*2, // 过期时间 2h
+			Issuer:    "asong",                       // 签名的发行者
+		},
+	}
+	token ,err := j.GenerateToken(claims)
+	if err != nil {
+		response.FailWithMessage("获取token失败", c)
+		return
+	}
+	res := resp.ResponseUser{Username: u.Username,Nickname: u.Nickname,Avatar: u.Avatar}
+	response.OkWithData(resp.LoginResponse{User: res,Token: token,ExpiresAt: claims.ExpiresAt *1000},c)
+	return
+}
+
+```
+
+
+
+好啦，代码部分完成了，接下来就可以测试了，在测试之前，我再来学一下swagger，生成接口文档。
+
+
+
+## 2. swagger
+
+随着互联网的发展，现在的网站都是前后端分离了，前端渲染页面，后端提供API。前后端的唯一联系，变成了API接口；API文档变成了前后端开发人员联系的纽带，变得越来越重要，swagger就是一款让你更好的书写API文档的框架。
+
+swagger可以减少我们的工作量，直接生成API文档，减少了文档编写的工作。我们先来看一看swagger的生态使用图：
+
+![](./images/swagger.png)
+
+红色字是官方推荐的。
+
+- swagger-ui：一个渲染页面，可以用来显示API文档。不可以编辑。
+- swagger-editor：就是一个在线编辑文档说明文件（swagger.json或swagger.yaml文件）的工具，以方便生态中的其他小工具（swagger-ui）等使用
+- swagger-codegen：代码生成器，脚手架。可以根据swagger.json或者swagger.yml文件生成指定的计算机语言指定框架的代码。
+- Swagger-validator：这个小工具是用来校验生成的文档说明文件是否符合语法规定的。用法非常简单，只需url地址栏，根路径下加上一个参数url，参数内容是放swagger说明文件的地址。即可校验。
+
+目前最流行的做法，就是在代码注释中写上swagger相关的注释，然后，利用小工具生成swagger.json或者swagger.yaml文件。
+
+这里我们采用代码注释的方式实现。注释规范参考官网即可：https://goswagger.io/use/spec/params.html。这里只是一个简单实用，更多实用阅读官方文档学习。或者参考这篇文章：https://razeencheng.com/post/go-swagger
+
+### 2.1 项目中使用swagger
+
+- 安装swag
+
+```shell
+$ go get -u github.com/swaggo/swag/cmd/swag
+```
+
+这里有一点需要注意，生成的可执行文件会放到 $GOPATH/bin目录下，需要将这个路径放到环境变量中，验证是否安装成功：
+
+```shell
+$ swag -v
+$ swag version v1.6.7
+```
+
+- 安装gin-swagger
+
+```shell
+$ go get -u github.com/swaggo/gin-swagger
+$ go get -u github.com/swaggo/gin-swagger/swaggerFiles
+```
+
+- 安装好第三方库后，我们进入到API接口中，在相应方法上编写swagger注释，注释参考[go-gin-example](go-gin-example)
+
+```go
+// @Tags Base
+// @Summary 用户登录
+// @Produce  application/json
+// @Param data body request.LoginRequest true "用户登录接口"
+// @Success 200 {string} string "{"success":true,"data": { "user": { "username": "asong", "nickname": "", "avatar": "" }, "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6ImFzb25nIiwiZXhwIjoxNTk2OTAyMzEyLCJpc3MiOiJhc29uZyIsIm5iZiI6MTU5Njg5NDExMn0.uUS1TreZusX-hL3nKOSNYZIeZ_0BGrxWjKI6xdpdO40", "expiresAt": 1596902312000 },,"msg":"操作成功"}"
+// @Router /base/login [post]
+func login(c *gin.Context)  {}
+
+// @Tags User
+// @Summary 用户修改密码
+// @Security ApiKeyAuth
+// @Produce  application/json
+// @Param data body request.ChangePassword true "用户修改密码"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
+// @Router /user/setPassword [PUT]
+func setPassword(c *gin.Context) {}
+```
+
+- 接下来生成swagger文档，进入项目根目录，执行以下命令
+
+```shell
+$ swag init
+```
+
+完毕后会在你的项目根目录下生成docs目录：
+
+```shell
+docs/
+├── docs.go
+├── swagger.json
+└── swagger.yaml
+```
+
+
+
+- 还差最后一步，对swagger-ui进行路由注册，引入swagger生成的docs文件夹，图片中红色线是需要添加的
+
+<img src="./images/router_swag.png" style="zoom:50%;" />
+
+
+
+至此，swagger也配置完成了。
+
+
+
+## 3. 运行示例
+
+运行代码，浏览器进入http://localhost:8888/swagger/index.html，可以看到页面如下：
+
+<img src="./images/swagger-ui.png" style="zoom:50%;" />
+
+在这里就可以进行接口测试了。
+
+
+
+## 4. 总结
+
+这篇文章，到此就结束了，第一次写这么长的文章，对自己也是一种提升。有些模糊的概念，又学习了一遍，此篇文章，全是自己总结的，有错误欢迎指出。如果欢迎三连：点赞、看一看、转发；感谢各位。 
+
+不会的小伙伴，赶快学起来吧，项目代码地址：https://github.com/asong2020/Golang_Dream/tree/master/Gin/gin_jwt_swagger
+
+我是asong，一名普普通通的程序员，永远保持一颗热爱技术的心。欢迎关注个人公众号【Golang梦工厂】，第一时间观看优质文章，你想学的这里都有。
+
+获取2020GIN官方中文文档，后台回复：gin，即可获取。由笔者进行翻译，会定期进行维护。
+
+到这里结束喽，我们下期见。
+
+![](./images/qrcode_for_gh_efed4775ba73_258.jpg)
