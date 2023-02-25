@@ -15,6 +15,7 @@ import (
 	"sync"
 	"syscall"
 	"time"
+
 	// "github.com/fvbock/uds-go/introspect"
 )
 
@@ -105,21 +106,21 @@ func NewServer(addr string, handler http.Handler) (srv *endlessServer) {
 		sigChan: make(chan os.Signal),
 		isChild: isChild,
 		SignalHooks: map[int]map[os.Signal][]func(){
-			PRE_SIGNAL: {
-				syscall.SIGHUP:  {},
-				syscall.SIGUSR1: {},
-				syscall.SIGUSR2: {},
-				syscall.SIGINT:  {},
-				syscall.SIGTERM: {},
-				syscall.SIGTSTP: {},
+			PRE_SIGNAL: map[os.Signal][]func(){
+				syscall.SIGHUP:  []func(){},
+				syscall.SIGUSR1: []func(){},
+				syscall.SIGUSR2: []func(){},
+				syscall.SIGINT:  []func(){},
+				syscall.SIGTERM: []func(){},
+				syscall.SIGTSTP: []func(){},
 			},
-			POST_SIGNAL: {
-				syscall.SIGHUP:  {},
-				syscall.SIGUSR1: {},
-				syscall.SIGUSR2: {},
-				syscall.SIGINT:  {},
-				syscall.SIGTERM: {},
-				syscall.SIGTSTP: {},
+			POST_SIGNAL: map[os.Signal][]func(){
+				syscall.SIGHUP:  []func(){},
+				syscall.SIGUSR1: []func(){},
+				syscall.SIGUSR2: []func(){},
+				syscall.SIGINT:  []func(){},
+				syscall.SIGTERM: []func(){},
+				syscall.SIGTSTP: []func(){},
 			},
 		},
 		state: STATE_INIT,
